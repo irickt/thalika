@@ -1,0 +1,12 @@
+.DS_Store
+node_modules
+*.js
+!client/lib/js/lib/*.js
+_work/*
+_old/*
+tmp/*
+*.pid
+*.gz
+*.log
+logs.txt
+*~

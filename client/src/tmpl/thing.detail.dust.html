@@ -1,0 +1,33 @@
+<li>
+    <header>
+        <span class='from'>
+            {merchant}
+        </span>
+        <span class='subject'>
+            {description}
+        </span>
+        <span class='date'>
+            {date}
+        </span>
+        <span class='date'>
+            {value}
+        </span>
+    </header>
+    <article>
+        <div class='body'>
+
+            {?tags}
+                <ul class='tagDetail'>
+                    {#tags}
+                        <li>{.}</li>
+                    {/tags}
+                </ul>
+            {:else}
+                no tags
+            {/tags}
+
+            <p>{image}</p>
+        </div>
+    </article>
+</li>
+
