@@ -34,7 +34,7 @@ MainApp.module "#{thingModuleName}App.thingViews", (thingViews, MainApp, Backbon
         events:
             click: "showItemDetail"
         showItemDetail: (e) ->
-            MainApp.vent.trigger "#{thingEventName}:item:show", @model
+            MainApp.vent.trigger "#{thingEventName}:item:show", this.model.id # trigger on thingApp
 
     # thing list view, renders the individual thing previews
     ListView = Backbone.Marionette.CollectionView.extend
@@ -43,6 +43,7 @@ MainApp.module "#{thingModuleName}App.thingViews", (thingViews, MainApp, Backbon
         itemView: ItemInListView
 
 
+    # public methods called by "controller" ie thingApp
     # display a specific item
     thingViews.showItem = (item) ->
         view = new ItemDetailView
@@ -56,9 +57,10 @@ MainApp.module "#{thingModuleName}App.thingViews", (thingViews, MainApp, Backbon
         MainApp.layout.main.show view
 
 
+    # not used, redundant with bind in controller
     # display selected item in the main area, triggered by showItem click, above
     MainApp.vent.bind "#{thingEventName}:item:show", (item) ->
-        thingViews.showItem item
+        #thingViews.showItem item
 
 
 

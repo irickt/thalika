@@ -28,13 +28,13 @@ window.MainApp.module "Routing.#{thingModuleName}Routing", (thingRouting, MainAp
     # handlers for these routes are in the "controller"
     MainApp.addInitializer ->
         thingRouting.router = new thingRouting.Router
-            controller: MainApp["#{thingModuleName}App"]
+            controller: MainApp["#{thingModuleName}App"] # look up thingApp
 
 
-    # send sub-app routing events to main app
+    # send thingApp routing events to mainApp router
     MainApp.vent.bind "#{thingEventName}:show", ->
         MainApp.Routing.showRoute "#{thingPathName}"
-    MainApp.vent.bind "#{thingEventName}:item:show", (item) ->
-        MainApp.Routing.showRoute "#{thingPathName}", item.id
+    MainApp.vent.bind "#{thingEventName}:item:show", (itemid) ->
+        MainApp.Routing.showRoute "#{thingPathName}", itemid
     MainApp.vent.bind "#{thingEventName}:tag:show", (tag) ->
         MainApp.Routing.showRoute "#{thingPathName}", "tag", tag

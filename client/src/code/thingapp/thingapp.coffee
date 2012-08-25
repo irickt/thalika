@@ -37,7 +37,6 @@ window.MainApp.module "#{thingModuleName}App", (thingApp, MainApp, Backbone, Mar
         MainApp.vent.trigger "#{thingEventName}:tag:show", tag
         thingApp.Tags.showTagList()
 
-    # not used, this is done by thingViews directly
     # router handler: show item detail, by id
     thingApp.showItemDetail = (itemId) ->
         MainApp.vent.trigger "#{thingEventName}:item:show", itemId
@@ -51,26 +50,25 @@ window.MainApp.module "#{thingModuleName}App", (thingApp, MainApp, Backbone, Mar
             filteredItems = list.forTag tag
             thingApp.thingViews.showList filteredItems # actually make a view and show it
 
-    # not used, this is done by thingViews directly
     # register a callback to fire when collection is reset, which is triggered by ?
     displayItem = (itemId) ->
         thingApp.itemList.onReset (list) ->
             item = list.get itemId
             thingApp.thingViews.showItem item
 
-# show items filtered by tag
-    # triggered by tag click or route
+
+    # bind show events to display actions
+    # triggered by tag click or route or initialization
+
+    # show items filtered by tag
     MainApp.vent.bind "#{thingEventName}:tag:show", (tag) ->
         displayItemsFilteredBy tag
 
     # show all the items
-    # triggered by tag click or route or initialization
     MainApp.vent.bind "#{thingEventName}:show", ->
         displayItemsFilteredBy()
 
-    # not used, this is done by thingViews directly
     # show one item
-    # triggered by item click or route
     MainApp.vent.bind "#{thingEventName}:item:show", (itemId) ->
         displayItem itemId
 
