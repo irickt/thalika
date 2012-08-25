@@ -1,15 +1,15 @@
 ###
 Backbone = require "backbone" # window
-MainApp = require "mainapp" # window
+mainApp = require "mainapp" # window
 
 template, uses dust
 ###
 
-window.MainApp.module "graphApp", (graphApp, MainApp, Backbone, Marionette, $, _) ->
+window.MainApp.module "graphApp", (graphApp, mainApp, Backbone, Marionette, $, _) ->
 
     # local
     graphApp.Graph = Backbone.Model.extend {}
-    graphApp.GraphCollection = MainApp.Collection.extend
+    graphApp.GraphCollection = mainApp.Collection.extend
         url: "/graph"
         model: graphApp.Graph
 
@@ -18,7 +18,7 @@ window.MainApp.module "graphApp", (graphApp, MainApp, Backbone, Marionette, $, _
 
     # show all items
     graphApp.showGraph = ->
-        MainApp.vent.trigger "graph:show"
+        mainApp.vent.trigger "graph:show"
 
 
     # full contents of the graph
@@ -40,17 +40,17 @@ window.MainApp.module "graphApp", (graphApp, MainApp, Backbone, Marionette, $, _
             #setTimeout graphdemo, 0
             setTimeout graphApp.graphDemo.demo, 0
             # http://stackoverflow.com/questions/10572906/acting-on-an-element-in-onrender-doesnt-work
-        MainApp.layout.main.show view
+        mainApp.layout.main.show view
 
     # show all the items
     # triggered by app selection or route or initialization
-    MainApp.vent.bind "graph:show", ->
+    mainApp.vent.bind "graph:show", ->
         GraphView.showGraph() # actually make a view and show it
 
 
 
 
-    #MainApp.addInitializer ->
+    #graphApp.addInitializer ->
         #graphApp.itemList = new graphApp.GraphCollection()
         #graphApp.itemList.fetch()
 

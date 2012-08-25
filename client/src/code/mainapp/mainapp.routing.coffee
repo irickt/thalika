@@ -2,24 +2,38 @@
 Backbone = require "backbone"
 ###
 
-window.MainApp.module "Routing", (Routing, MainApp, Backbone, Marionette, $, _) ->
+
+window.MainApp.module "Routing", (routing, mainApp, Backbone, Marionette, $, _) ->
 
     # updates the url's hash fragment route
-    Routing.showRoute = (argmts...) ->
+    routing.showRoute = (argmts...) ->
         console.log "showRoute args", argmts #######
-        route = getRoutePath(argmts)
+        route = routePath argmts
         Backbone.history.navigate route, false
 
     # creates route based routeParts
-    getRoutePath = (routeParts) ->
-        base = routeParts[0]
-        length = routeParts.length
-        route = base
-        if length > 1
-            i = 1
+    routePath = (routeParts) ->
+        _.reduce routeParts, ((accum, part) -> "#{accum}/#{part}"), ""
 
-            while i < length
-                arg = routeParts[i]
-                route = route + "/" + arg  if arg
-                i++
-        route
+
+    routing.Router = Backbone.Marionette.AppRouter.extend
+        appRoutes:
+            "": "showRewardApp"
+            "reward": "showRewardApp"
+            "account": "showAccountApp"
+            "graph": "showGraphApp"
+
+    # handlers for these routes are in the "controller"
+    mainApp.addInitializer -> # mainApp.thingApp.addInitializer
+        routing.router = new routing.Router
+            controller: mainApp.layout
+
+
+
+    # actually show the route in the browser
+    mainApp.vent.bind "rewardapp:show", ->
+        mainApp.Routing.showRoute "reward"
+    mainApp.vent.bind "accountapp:show", ->
+        mainApp.Routing.showRoute "account"
+    mainApp.vent.bind "graphapp:show", ->
+        mainApp.Routing.showRoute "graph"

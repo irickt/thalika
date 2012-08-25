@@ -1,3 +1,3 @@
 module.exports = {}
 $ () ->
-    window.MainApp.start()
+    window.mainApp.start()

@@ -1,5 +1,5 @@
 
-window.MainApp.module "graphApp.graphDemo", (graphDemo, MainApp, Backbone, Marionette, $, _) ->
+window.MainApp.module "graphApp.graphDemo", (graphDemo, mainApp, Backbone, Marionette, $, _) ->
 
     graphDemo.demo = () ->
     # http://bl.ocks.org/1377729

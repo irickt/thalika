@@ -11,7 +11,7 @@ thingModuleName = "reward"
 thingEventName = "reward"
 #thingDataName = "reward"
 
-MainApp.module "#{thingModuleName}App.thingViews", (thingViews, MainApp, Backbone, Marionette, $, _) ->
+MainApp.module "#{thingModuleName}App.thingViews", (thingViews, mainApp, Backbone, Marionette, $, _) ->
 
     serializeDataDetail = ->
 
@@ -34,7 +34,7 @@ MainApp.module "#{thingModuleName}App.thingViews", (thingViews, MainApp, Backbon
         events:
             click: "showItemDetail"
         showItemDetail: (e) ->
-            MainApp.vent.trigger "#{thingEventName}:item:show", this.model.id # trigger on thingApp
+            mainApp.vent.trigger "#{thingEventName}:item:show", this.model.id # trigger on thingApp
 
     # thing list view, renders the individual thing previews
     ListView = Backbone.Marionette.CollectionView.extend
@@ -48,18 +48,18 @@ MainApp.module "#{thingModuleName}App.thingViews", (thingViews, MainApp, Backbon
     thingViews.showItem = (item) ->
         view = new ItemDetailView
             model: item
-        MainApp.layout.main.show view
+        mainApp.layout.main.show view
 
     # display a list of items
     thingViews.showList = (list) ->
         view = new ListView
             collection: list
-        MainApp.layout.main.show view
+        mainApp.layout.main.show view
 
 
     # not used, redundant with bind in controller
     # display selected item in the main area, triggered by showItem click, above
-    MainApp.vent.bind "#{thingEventName}:item:show", (item) ->
+    # mainApp.vent.bind "#{thingEventName}:item:show", (item) ->
         #thingViews.showItem item
 
 

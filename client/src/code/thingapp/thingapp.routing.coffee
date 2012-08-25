@@ -9,7 +9,9 @@ thingPathName = "reward"
 thingEventName = "reward"
 #thingDataName = "reward"
 
-window.MainApp.module "Routing.#{thingModuleName}Routing", (thingRouting, MainApp, Backbone, Marionette, $, _) ->
+window.MainApp.module "Routing.#{thingModuleName}Routing", (thingRouting, mainApp, Backbone, Marionette, $, _) ->
+
+    # instead of defining on Routing and looking up thingApp, define on thingApp and look up Routing
 
     # handle incoming routes when the url hash is changed
     routes = {}
@@ -26,15 +28,16 @@ window.MainApp.module "Routing.#{thingModuleName}Routing", (thingRouting, MainAp
             #"#{thingPathName}/:id": "showItemDetail"
 
     # handlers for these routes are in the "controller"
-    MainApp.addInitializer ->
+    mainApp.addInitializer -> # mainApp.thingApp.addInitializer
         thingRouting.router = new thingRouting.Router
-            controller: MainApp["#{thingModuleName}App"] # look up thingApp
+            controller: mainApp["#{thingModuleName}App"] # look up thingApp
 
 
-    # send thingApp routing events to mainApp router
-    MainApp.vent.bind "#{thingEventName}:show", ->
-        MainApp.Routing.showRoute "#{thingPathName}"
-    MainApp.vent.bind "#{thingEventName}:item:show", (itemid) ->
-        MainApp.Routing.showRoute "#{thingPathName}", itemid
-    MainApp.vent.bind "#{thingEventName}:tag:show", (tag) ->
-        MainApp.Routing.showRoute "#{thingPathName}", "tag", tag
+
+    # actually show the route in the browser
+    mainApp.vent.bind "#{thingEventName}:show", ->
+        mainApp.Routing.showRoute "#{thingPathName}"
+    mainApp.vent.bind "#{thingEventName}:item:show", (itemid) ->
+        mainApp.Routing.showRoute "#{thingPathName}", itemid
+    mainApp.vent.bind "#{thingEventName}:tag:show", (tag) ->
+        mainApp.Routing.showRoute "#{thingPathName}", "tag", tag
