@@ -5,160 +5,19 @@ MainApp = require "mainapp" # window
 template, uses dust
 ###
 
-window.MainApp.module "GraphApp", (GraphApp, MainApp, Backbone, Marionette, $, _) ->
-
-    graphdemo = () ->
-    # http://bl.ocks.org/1377729
-
-        w = 600
-        h = 500
-        labelDistance = 0
-        vis = d3.select(".graph-view").append("svg:svg").attr("width", w).attr("height", h)
-
-        nodes = []
-        links = []
-        labelAnchors = []
-        labelAnchorLinks = []
-
-        i = 0
-        while i < 30
-            node = label: "node " + i
-            nodes.push node
-            labelAnchors.push node: node
-            labelAnchors.push node: node
-            i++
-
-        i = 0
-        while i < nodes.length
-
-            j = 0
-            while j < i
-                if Math.random() > .95
-                    links.push
-                        source: i
-                        target: j
-                        weight: Math.random()
-                j++
-
-            labelAnchorLinks.push
-                source: i * 2
-                target: i * 2 + 1
-                weight: 1
-
-            i++
-
-
-
-        force = d3.layout.force()
-            .size([w, h])
-            .nodes(nodes)
-            .links(links)
-            .gravity(1)
-            .linkDistance(50)
-            .charge(-3000)
-            .linkStrength (x) ->
-                x.weight * 10
-        force.start()
-
-        force2 = d3.layout.force()
-            .nodes(labelAnchors)
-            .links(labelAnchorLinks)
-            .gravity(0)
-            .linkDistance(0)
-            .linkStrength(8)
-            .charge(-100)
-            .size([w, h])
-        force2.start()
-
-        link = vis.selectAll("line.link")
-            .data(links)
-            .enter()
-            .append("svg:line")
-            .attr("class", "link")
-            .style("stroke", "#CCC")
-
-        node = vis.selectAll("g.node")
-            .data(force.nodes())
-            .enter()
-            .append("svg:g")
-            .attr("class", "node")
-
-        node.append("svg:circle")
-            .attr("r", 5)
-            .style("fill", "#555")
-            .style("stroke", "#FFF")
-            .style "stroke-width", 3
-
-        node.call force.drag
-
-        anchorLink = vis.selectAll("line.anchorLink")
-            .data(labelAnchorLinks)
-            #.enter().append("svg:line").attr("class", "anchorLink").style("stroke", "#999");
-
-        anchorNode = vis.selectAll("g.anchorNode")
-            .data(force2.nodes())
-            .enter()
-            .append("svg:g")
-            .attr("class", "anchorNode")
-
-        anchorNode.append("svg:circle")
-            .attr("r", 0)
-            .style "fill", "#FFF"
-
-        anchorNode.append("svg:text")
-            .text (d, i) ->
-                (if i % 2 is 0 then "" else d.node.label)
-            .style("fill", "#555")
-            .style("font-family", "Arial")
-            .style "font-size", 12
-
-        updateLink = ->
-            this.attr "x1", (d) ->
-                d.source.x
-            .attr "y1", (d) ->
-                d.source.y
-            .attr "x2", (d) ->
-                d.target.x
-            .attr "y2", (d) ->
-                d.target.y
-
-        updateNode = ->
-            this.attr "transform", (d) ->
-                "translate( #{ d.x }, #{ d.y } )"
-
-        force.on "tick", ->
-            force2.start()
-            node.call updateNode
-            anchorNode.each (d, i) ->
-                if i % 2 is 0
-                    d.x = d.node.x
-                    d.y = d.node.y
-                else
-                    b = this.childNodes[1].getBBox()
-                    diffX = d.x - d.node.x
-                    diffY = d.y - d.node.y
-                    dist = Math.sqrt(diffX * diffX + diffY * diffY)
-                    shiftX = b.width * (diffX - dist) / (dist * 2)
-                    shiftX = Math.max(-b.width, Math.min(0, shiftX))
-                    shiftY = 5
-                    this.childNodes[1].setAttribute "transform", "translate( #{ shiftX }, #{ shiftY } )"
-
-            anchorNode.call updateNode
-            link.call updateLink
-            anchorLink.call updateLink
-
+window.MainApp.module "graphApp", (graphApp, MainApp, Backbone, Marionette, $, _) ->
 
     # local
-    GraphApp.Graph = Backbone.Model.extend {}
-    GraphApp.GraphCollection = MainApp.Collection.extend
+    graphApp.Graph = Backbone.Model.extend {}
+    graphApp.GraphCollection = MainApp.Collection.extend
         url: "/graph"
-        model: GraphApp.Graph
+        model: graphApp.Graph
 
 
     # handlers called by the router
 
     # show all items
-    GraphApp.showGraph = ->
+    graphApp.showGraph = ->
         MainApp.vent.trigger "graph:show"
 
 
@@ -178,7 +37,8 @@ window.MainApp.module "GraphApp", (GraphApp, MainApp, Backbone, Marionette, $, _
         view = new GraphView {}
         view.on "render", () ->
             #console.log "the view was rendered, but then written over"
-            setTimeout graphdemo, 0
+            #setTimeout graphdemo, 0
+            setTimeout graphApp.graphDemo.demo, 0
             # http://stackoverflow.com/questions/10572906/acting-on-an-element-in-onrender-doesnt-work
         MainApp.layout.main.show view
 
@@ -191,6 +51,6 @@ window.MainApp.module "GraphApp", (GraphApp, MainApp, Backbone, Marionette, $, _
 
 
     #MainApp.addInitializer ->
-        #GraphApp.itemList = new GraphApp.GraphCollection()
-        #GraphApp.itemList.fetch()
+        #graphApp.itemList = new graphApp.GraphCollection()
+        #graphApp.itemList.fetch()
 

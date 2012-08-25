@@ -61,8 +61,6 @@ MainApp.module "#{thingModuleName}App.thingViews", (thingViews, MainApp, Backbon
         thingViews.showItem item
 
 
-    #thingViews.addInitializer ->
-    #    thingViews.serializeData = serializeData()
 
     console.log "thingViews", this
 

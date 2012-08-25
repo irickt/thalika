@@ -25,10 +25,11 @@ window.MainApp.module "Routing.#{thingModuleName}Routing", (thingRouting, MainAp
             #"#{thingPathName}/tag/:tag": "showItemsByTag"
             #"#{thingPathName}/:id": "showItemDetail"
 
-    # handlers for the routes are in the "controller"
+    # handlers for these routes are in the "controller"
     MainApp.addInitializer ->
         thingRouting.router = new thingRouting.Router
             controller: MainApp["#{thingModuleName}App"]
+
 
     # send sub-app routing events to main app
     MainApp.vent.bind "#{thingEventName}:show", ->

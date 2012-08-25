@@ -24,6 +24,9 @@ window.MainApp.module "#{thingModuleName}App", (thingApp, MainApp, Backbone, Mar
                 return tags.indexOf(tag) >= 0
             return new thingApp.ThingCollection filteredItems
 
+
+
+    # the "controller" for the router
     # router handler: show all items
     thingApp.showItemsList = ->
         MainApp.vent.trigger "#{thingEventName}:show"

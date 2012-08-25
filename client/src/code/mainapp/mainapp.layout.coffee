@@ -30,14 +30,15 @@ window.MainApp.module "Layout", (Layout, MainApp, Backbone, Marionette, $, _) ->
             _.bindAll this, "setSelection"
 
             # bind show events to change controls in the top level layout
-            @setupAppSelectionEvents()
+            this.setupAppSelectionEvents()
 
-        # show the correct app in the select box.
+        # show the correct app in the select popup.
         setSelection: (app) ->
-            @$("select").val app
+            this.$("select").val app
 
+        # set the select popup from the app eg a url
         setupAppSelectionEvents: ->
-            that = this
+            that = this # doesn't bindAll do this?
             MainApp.vent.bind "reward:show", ->
                 that.setSelection "rewards"
             MainApp.vent.bind "account:show", ->
@@ -45,7 +46,7 @@ window.MainApp.module "Layout", (Layout, MainApp, Backbone, Marionette, $, _) ->
             MainApp.vent.bind "graph:show", ->
                 that.setSelection "graph"
 
-        # Figure out which app is being selected and call the correct object's `show` method.
+        # set the app from the select popup
         appChanged: (e) ->
             e.preventDefault()
             appName = $(e.currentTarget).val()
@@ -54,7 +55,7 @@ window.MainApp.module "Layout", (Layout, MainApp, Backbone, Marionette, $, _) ->
             else if appName is "account"
                 MainApp.AccountApp.showAccount()
             else if appName is "graph"
-                MainApp.GraphApp.showGraph()
+                MainApp.graphApp.showGraph()
 
 
 

@@ -202,9 +202,9 @@ task 'build', 'Build client or server. This does all the above.',
 
 task 'test', 'Run tests',
     ['task(build)'], (options) -> # equivalent to {recipe: (options) -> ..., outputs: []}
-        command = "./node_modules/.bin/buster-test --config test/js/config-tests.js"
+        #command = "./node_modules/.bin/buster-test --config test/js/config-tests.js"
         # depends on npm link. or use other project or env alias, or for global install ...
-        #command = "/usr/local/lib/node_modules/buster/bin/buster-test --config test/config-tests.js -e browser"
+        command = "/usr/local/lib/node_modules/buster/bin/buster-test --config test/js/config-tests.js"
         this.exec [
             command
             ]
