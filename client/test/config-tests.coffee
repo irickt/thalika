@@ -1,9 +1,10 @@
 module.exports =
     "browser tests":
+        autorun: false
         environment: "browser"
         rootPath: "../",
         sources: [
-            "public/js/index.js"
+            "lib/js/mainapp/start.js"
             ]
         tests: [
             "test/browser/test-*.js"

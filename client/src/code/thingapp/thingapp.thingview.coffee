@@ -21,14 +21,12 @@ MainApp.module "#{thingModuleName}App.thingViews", (thingViews, mainApp, Backbon
     ItemDetailView = Backbone.Marionette.ItemView.extend
         tagName: "ul"
         className: "#{thingCssName}-list #{thingCssName}-view"
-        #template: "##{thingCssName}-view-template"
         template: "thing.detail" #  "#{thingCssName}.detail"
         #serializeData: serializeDataDetail
 
     # preview of the thing in the list. click to show its full contents.
     ItemInListView = Backbone.Marionette.ItemView.extend
         tagName: "li"
-        #template: "##{thingCssName}-preview-template"
         template: "thing.preview" # "#{thingCssName}.preview"
         #serializeData: serializeDataPreview
         events:
@@ -55,13 +53,6 @@ MainApp.module "#{thingModuleName}App.thingViews", (thingViews, mainApp, Backbon
         view = new ListView
             collection: list
         mainApp.layout.main.show view
-
-
-    # not used, redundant with bind in controller
-    # display selected item in the main area, triggered by showItem click, above
-    # mainApp.vent.bind "#{thingEventName}:item:show", (item) ->
-        #thingViews.showItem item
-
 
 
     console.log "thingViews", this

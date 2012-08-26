@@ -14,13 +14,6 @@ window.MainApp.module "graphApp", (graphApp, mainApp, Backbone, Marionette, $, _
         model: graphApp.Graph
 
 
-    # handlers called by the router
-
-    # show all items
-    graphApp.showGraph = ->
-        mainApp.vent.trigger "graph:show"
-
-
     # full contents of the graph
     GraphView = Backbone.Marionette.ItemView.extend
         tagName: "div"
@@ -42,10 +35,15 @@ window.MainApp.module "graphApp", (graphApp, mainApp, Backbone, Marionette, $, _
             # http://stackoverflow.com/questions/10572906/acting-on-an-element-in-onrender-doesnt-work
         mainApp.layout.main.show view
 
-    # show all the items
-    # triggered by app selection or route or initialization
+
+
+    # handler called by the router
+    graphApp.showGraph = ->
+        mainApp.vent.trigger "graph:show"
+
+    # actually make a view and show it
     mainApp.vent.bind "graph:show", ->
-        GraphView.showGraph() # actually make a view and show it
+        GraphView.showGraph()
 
 
 

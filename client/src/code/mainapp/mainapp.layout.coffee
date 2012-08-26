@@ -61,11 +61,11 @@ window.MainApp.module "Layout", (layout, mainApp, Backbone, Marionette, $, _) ->
 
         # public methods called by router
         showRewardApp: ->
-            mainApp.vent.trigger "rewardapp:show" # mainApp.rewardApp.showItemsList()
+            mainApp.vent.trigger "rewardapp:show"
         showAccountApp: ->
-            mainApp.vent.trigger "accountapp:show" # mainApp.AccountApp.showAccount()
+            mainApp.vent.trigger "accountapp:show"
         showGraphApp: ->
-            mainApp.vent.trigger "graphapp:show" # mainApp.graphApp.showGraph()
+            mainApp.vent.trigger "graphapp:show"
 
 
     # in the "view"

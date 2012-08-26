@@ -13,11 +13,11 @@ module.exports =
         url: "https://github.com/atlantanodejs/site-app/raw/master/LICENSE"
     ]
     private: true
-    main: "lib/server.js"
+    main: "lib/js/server.js"
     directories:
         lib: "lib"
     scripts:
-        start: "lib/server.js"
+        start: "node lib/js/server.js"
     dependencies:
         underscore: ">=1.3.3"
         connect: "1.8.x"

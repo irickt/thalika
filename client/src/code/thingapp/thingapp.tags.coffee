@@ -65,7 +65,7 @@ window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule, mainApp, Backbo
     serializeData = ->
         _.extend commonData,
             customTags: tagsModule.tagCollection.toJSON()
-        # context this = view
+        # context is view
 
     # view for the list of tags. standard tags hard coded plus dynamic tags
     tagsModule.TagsView = Backbone.Marionette.ItemView.extend
