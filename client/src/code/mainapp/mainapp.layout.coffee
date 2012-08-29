@@ -3,10 +3,18 @@ Backbone = require "backbone"
 $ = require "jquery"
 _ = require "underscore"
 
-inject these from config
-require rewardApp
-require accountApp
-require graphApp
+
+mainApp.vent
+mainApp.addInitializer # use layout.addInitializer
+mainApp.layout to instantiate this module
+mainApp.content to install this instance
+
+
+config for the list of sub apps
+mainApp.rewardApp
+mainApp.accountApp
+mainApp.graphApp
+
 
 template, registered on dust
 ###
@@ -30,6 +38,10 @@ window.MainApp.module "Layout", (layout, mainApp, Backbone, Marionette, $, _) ->
 
             # bind show events to change controls in the top level layout
             this.setupAppSelectionEvents()
+
+
+        # the two-way "binding" to the app select popup
+        # main makes the apps from configuration, install these then
 
         # show the correct app in the select popup.
         setSelection: (app) ->
@@ -57,9 +69,11 @@ window.MainApp.module "Layout", (layout, mainApp, Backbone, Marionette, $, _) ->
                 mainApp.vent.trigger "graphapp:show"
 
 
-        # the controller for mainApp
+
+        # the controller for mainApp, delegated from the router
 
         # public methods called by router
+        # *** just let the router send the events
         showRewardApp: ->
             mainApp.vent.trigger "rewardapp:show"
         showAccountApp: ->
@@ -69,6 +83,7 @@ window.MainApp.module "Layout", (layout, mainApp, Backbone, Marionette, $, _) ->
 
 
     # in the "view"
+    # *** just have the app listen for its event (or a standard app show API)
     # actually show the apps
     mainApp.vent.bind "rewardapp:show", ->
         mainApp.rewardApp.showItemsList()

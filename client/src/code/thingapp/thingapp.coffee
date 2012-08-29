@@ -1,5 +1,10 @@
 ###
 Backbone = require "backbone"
+mainApp.vent
+thingApp.Tags
+thingApp.thingViews
+parent mainApp
+
 ###
 
 #thingCssName = "reward"

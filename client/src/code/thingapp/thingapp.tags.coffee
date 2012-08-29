@@ -2,6 +2,13 @@
 Backbone = require "backbone"
 $ = require "jquery"
 
+mainApp.vent
+mainApp.layout
+tagsModule.tagsView
+
+parent thingApp
+
+
 template name, registered on dust
 
 ###
@@ -68,7 +75,7 @@ window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule, mainApp, Backbo
         # context is view
 
     # view for the list of tags. standard tags hard coded plus dynamic tags
-    tagsModule.TagsView = Backbone.Marionette.ItemView.extend
+    tagsModule.tagsView = Backbone.Marionette.ItemView.extend
         template: "thing.tags"  #  "#{thingCssName}.tags"
         serializeData: serializeData
 
@@ -86,7 +93,7 @@ window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule, mainApp, Backbo
 
     # display the tags view
     tagsModule.showTagList = ->
-        view = new tagsModule.TagsView
+        view = new tagsModule.tagsView
             collection: tagsModule.tagCollection
         mainApp.layout.navigation.show view
 

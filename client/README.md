@@ -4,7 +4,7 @@
 
 -----------------
 
-Client code originally based on BBCloneMail ©Derrick Bailey
+Client code originally based on BBCloneMail ©Derick Bailey
 
 -----------------
 

@@ -1,6 +1,11 @@
 ###
 Backbone = require "backbone"
 
+mainApp.vent
+mainApp.layout
+
+parent thingApp
+
 templates, registered on dust
 
 ###

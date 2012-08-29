@@ -1,5 +1,11 @@
 ###
 Backbone = require "backbone"
+mainApp.addInitializer -> # mainApp.thingApp.addInitializer
+mainApp.vent
+mainApp.layout # is the controller
+mainApp.Routing # events to self
+
+config for the list of sub apps
 ###
 
 
@@ -16,6 +22,9 @@ window.MainApp.module "Routing", (routing, mainApp, Backbone, Marionette, $, _) 
         _.reduce routeParts, ((accum, part) -> "#{accum}/#{part}"), ""
 
 
+    # the two-way "binding" to the browser's address bar
+    # *** apps should install these along with the subroutes
+
     routing.Router = Backbone.Marionette.AppRouter.extend
         appRoutes:
             "": "showRewardApp"
@@ -27,8 +36,6 @@ window.MainApp.module "Routing", (routing, mainApp, Backbone, Marionette, $, _) 
     mainApp.addInitializer -> # mainApp.thingApp.addInitializer
         routing.router = new routing.Router
             controller: mainApp.layout
-
-
 
     # actually show the route in the browser
     mainApp.vent.bind "rewardapp:show", ->

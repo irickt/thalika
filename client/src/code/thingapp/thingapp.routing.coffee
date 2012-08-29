@@ -1,5 +1,11 @@
 ###
 Backbone = require "backbone" # window
+mainApp.vent
+mainApp.Routing
+mainApp.addInitializer # should be thingRouting.addInitializer
+mainApp.thingApp
+parent Routing
+
 ###
 
 
