@@ -36,6 +36,9 @@ window.MainApp.module "graphApp", (graphApp, mainApp, Backbone, Marionette, $, _
         mainApp.layout.main.show view
 
 
+    # listen for mainApp event
+    mainApp.vent.bind "graphapp:show", ->
+        graphApp.showGraph()
 
     # handler called by the router
     graphApp.showGraph = ->

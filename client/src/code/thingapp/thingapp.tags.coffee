@@ -33,33 +33,6 @@ commonData =
             tag: "discard"
             label: "Discard"
         ]
-xdata =
-    title: "Reward tags"
-    route: "#reward"
-    standardTags: [
-            tag: ""
-            label: "Active"
-        ,
-            tag: "inactive"
-            label: "Inactive"
-        ,
-            tag: "discard"
-            label: "Discard"
-        ]
-    customTags: [
-            tag: "vacation"
-            label: "Vacation"
-        ,
-            tag: "food"
-            label: "Food"
-        ,
-            tag: "outdoors"
-            label: "Outdoors"
-        ,
-            tag: "entertainment"
-            label: "Entertainment"
-        ]
-
 
 
 window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule, mainApp, Backbone, Marionette, $, _) ->
@@ -109,3 +82,33 @@ window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule, mainApp, Backbo
             tagsModule.serializeData = serializeData()
 
     console.log "tagsModule", this
+
+
+###
+xdata =
+    title: "Reward tags"
+    route: "#reward"
+    standardTags: [
+            tag: ""
+            label: "Active"
+        ,
+            tag: "inactive"
+            label: "Inactive"
+        ,
+            tag: "discard"
+            label: "Discard"
+        ]
+    customTags: [
+            tag: "vacation"
+            label: "Vacation"
+        ,
+            tag: "food"
+            label: "Food"
+        ,
+            tag: "outdoors"
+            label: "Outdoors"
+        ,
+            tag: "entertainment"
+            label: "Entertainment"
+        ]
+###

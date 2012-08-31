@@ -41,7 +41,8 @@ window.MainApp.module "Layout", (layout, mainApp, Backbone, Marionette, $, _) ->
 
 
         # the two-way "binding" to the app select popup
-        # main makes the apps from configuration, install these then
+        # main makes the apps from configuration, API to modify any control references then
+        # and have the template use a list instead of hard code, along with "Home"
 
         # show the correct app in the select popup.
         setSelection: (app) ->
@@ -50,11 +51,11 @@ window.MainApp.module "Layout", (layout, mainApp, Backbone, Marionette, $, _) ->
         # set the select popup from the app eg a url
         setupAppSelectionEvents: ->
             that = this # doesn't bindAll do this?
-            mainApp.vent.bind "rewardapp:show", ->
+            mainApp.vent.bind "rewardapp:shown", ->
                 that.setSelection "rewards"
-            mainApp.vent.bind "accountapp:show", ->
+            mainApp.vent.bind "accountapp:shown", ->
                 that.setSelection "account"
-            mainApp.vent.bind "graphapp:show", ->
+            mainApp.vent.bind "graphapp:shown", ->
                 that.setSelection "graph"
 
         # set the app from the select popup
@@ -63,34 +64,10 @@ window.MainApp.module "Layout", (layout, mainApp, Backbone, Marionette, $, _) ->
             appName = $(e.currentTarget).val()
             if appName is "rewards"
                 mainApp.vent.trigger "rewardapp:show"
-            else if appName is "account"
+            if appName is "account"
                 mainApp.vent.trigger "accountapp:show"
             else if appName is "graph"
                 mainApp.vent.trigger "graphapp:show"
-
-
-
-        # the controller for mainApp, delegated from the router
-
-        # public methods called by router
-        # *** just let the router send the events
-        showRewardApp: ->
-            mainApp.vent.trigger "rewardapp:show"
-        showAccountApp: ->
-            mainApp.vent.trigger "accountapp:show"
-        showGraphApp: ->
-            mainApp.vent.trigger "graphapp:show"
-
-
-    # in the "view"
-    # *** just have the app listen for its event (or a standard app show API)
-    # actually show the apps
-    mainApp.vent.bind "rewardapp:show", ->
-        mainApp.rewardApp.showItemsList()
-    mainApp.vent.bind "accountapp:show", ->
-        mainApp.AccountApp.showAccount()
-    mainApp.vent.bind "graphapp:show", ->
-        mainApp.graphApp.showGraph()
 
 
 
@@ -107,3 +84,28 @@ window.MainApp.module "Layout", (layout, mainApp, Backbone, Marionette, $, _) ->
 
 
         console.log "layout", mainApp.layout
+
+
+
+
+
+
+        # the controller for mainApp, delegated from the router
+
+        # public methods called by router
+        # *** just let the router send the events
+        #showRewardApp: ->
+        #    mainApp.vent.trigger "rewardapp:show"
+        #showGraphApp: ->
+        #    mainApp.vent.trigger "graphapp:show"
+
+
+    # in the "view"
+    # *** just have the app listen for its event, which it has installed in main
+    # actually show the apps
+    #mainApp.vent.bind "rewardapp:show", ->
+    #    mainApp.rewardApp.showItemsList()
+    #mainApp.vent.bind "graphapp:show", ->
+    #    mainApp.graphApp.showGraph()
+
+

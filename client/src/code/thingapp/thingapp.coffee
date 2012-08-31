@@ -30,23 +30,32 @@ window.MainApp.module "#{thingModuleName}App", (thingApp, mainApp, Backbone, Mar
             return new thingApp.ThingCollection filteredItems
 
 
+    # listen for mainApp request to show the default view
+    mainApp.vent.bind "#{thingEventName}app:show", ->
+        thingApp.showItemsList()
+
+    # we're the current view, set up the navigation here (as main does too)
+    mainApp.vent.bind "#{thingEventName}app:shown", ->
+        thingApp.Tags.showTagList()
 
     # the "controller" for the router
-    # the repeated showTagList is needed because incoming urls don't pass through app level controller
+    # any app url must trigger navigation set up: showTagList and app selector control
+    # in effect incoming urls must pass through app level controller
+
     # router handler: show all items
     thingApp.showItemsList = ->
         mainApp.vent.trigger "#{thingEventName}:show"
-        thingApp.Tags.showTagList()
+        mainApp.vent.trigger "#{thingEventName}app:shown"
 
     # router handler: show items for the given tag
     thingApp.showItemsByTag = (tag) ->
         mainApp.vent.trigger "#{thingEventName}:tag:show", tag
-        thingApp.Tags.showTagList()
+        mainApp.vent.trigger "#{thingEventName}app:shown"
 
     # router handler: show item detail, by id
     thingApp.showItemDetail = (itemId) ->
         mainApp.vent.trigger "#{thingEventName}:item:show", itemId
-        thingApp.Tags.showTagList()
+        mainApp.vent.trigger "#{thingEventName}app:shown"
 
 
 
@@ -66,19 +75,21 @@ window.MainApp.module "#{thingModuleName}App", (thingApp, mainApp, Backbone, Mar
     # bind show events to display actions
     # triggered by tag click or route or initialization
 
-    # show items filtered by tag
-    mainApp.vent.bind "#{thingEventName}:tag:show", (tag) ->
-        displayItemsFilteredBy tag
-
     # show all the items
     mainApp.vent.bind "#{thingEventName}:show", ->
         displayItemsFilteredBy()
+
+    # show items filtered by tag
+    mainApp.vent.bind "#{thingEventName}:tag:show", (tag) ->
+        displayItemsFilteredBy tag
 
     # show one item
     mainApp.vent.bind "#{thingEventName}:item:show", (itemId) ->
         displayItem itemId
 
 
+
     thingApp.addInitializer ->
         thingApp.itemList = new thingApp.ThingCollection()
         thingApp.itemList.fetch()
+

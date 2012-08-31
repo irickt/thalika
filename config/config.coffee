@@ -6,7 +6,7 @@ config =
         TITLE: packageData.name
         DESCRIPTION: packageData.description
         VERSION: packageData.version
-        FOR_SERVER: true
+        FOR_APPLICATION: true
 
     host:
         development:

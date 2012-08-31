@@ -20,6 +20,7 @@
         "backbone": "0.9.2"
     },
     "devDependencies": {
+        "gluejs": "*",
         "icing": "git://github.com/irickt/icing.git",
         "coffee-script": "*",
         "dustjs-linkedin": "",

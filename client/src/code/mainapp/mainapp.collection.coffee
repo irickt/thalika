@@ -1,5 +1,6 @@
 ###
 Backbone = require "backbone" # window
+
 ###
 
 # collection is the base for filtered collections, constructed when a tag is selected

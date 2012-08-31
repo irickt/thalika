@@ -1,7 +1,7 @@
 # note: ship with package.json to allow initial install of dev dependencies
 
 module.exports =
-    name: "tahlika"
+    name: "tahlika-application"
     description: "Project template using Node.js Backbone.js Marionette Dustjs D3"
     version: "0.0.1"
     author: "Rick Thomas"

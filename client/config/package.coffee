@@ -24,7 +24,7 @@ module.exports =
 
     devDependencies:
         #buster: "*" # use the global install
-        #one: "*"
+        gluejs: "*"
         icing: "git://github.com/irickt/icing.git"
         'coffee-script': "*"
         "dustjs-linkedin": ""
