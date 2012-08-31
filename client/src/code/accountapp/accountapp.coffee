@@ -1,5 +1,4 @@
 ###
-Backbone = require "backbone"
 mainApp.vent
 thingApp.Tags
 thingApp.thingViews
@@ -7,13 +6,16 @@ parent mainApp
 
 ###
 
+Backbone = require "backbone"
+
+
 #thingCssName = "reward"
 thingModuleName = "reward"
 #thingPathName = "reward"
 thingDataName = "reward"
 thingEventName = "reward"
 
-window.MainApp.module "accountApp", (accountApp, mainApp, Backbone, Marionette, $, _) ->
+window.MainApp.module "accountApp", (accountApp, mainApp) ->
 
     accountApp.Thing = Backbone.Model.extend {}
 

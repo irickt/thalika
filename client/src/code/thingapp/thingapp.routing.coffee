@@ -1,5 +1,4 @@
 ###
-Backbone = require "backbone" # window
 mainApp.vent
 mainApp.Routing
 mainApp.addInitializer # should be thingRouting.addInitializer
@@ -8,6 +7,7 @@ parent Routing
 
 ###
 
+Backbone = require "backbone"
 
 #thingCssName = "reward"
 thingModuleName = "reward"
@@ -15,7 +15,7 @@ thingPathName = "reward"
 thingEventName = "reward"
 #thingDataName = "reward"
 
-window.MainApp.module "Routing.#{thingModuleName}Routing", (thingRouting, mainApp, Backbone, Marionette, $, _) ->
+window.MainApp.module "Routing.#{thingModuleName}Routing", (thingRouting, mainApp) ->
 
     # instead of defining on Routing and looking up thingApp, define on thingApp and look up Routing
 

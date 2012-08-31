@@ -1,15 +1,21 @@
 ###
-Backbone = require "backbone"
 mainApp.addInitializer -> # mainApp.thingApp.addInitializer
 mainApp.vent
 mainApp.layout # is the controller
 mainApp.Routing # events to self
 
+used previously to export showRoute
+
 config for the list of sub apps
 ###
 
+_ = require "underscore"
+Backbone = require "backbone"
 
-window.MainApp.module "Routing", (routing, mainApp, Backbone, Marionette, $, _) ->
+mainApp = require "mainapp/mainapp.js"
+
+
+window.MainApp.module "Routing", (routing) ->
 
     # update the url display
     routing.showRoute = (args...) ->

@@ -20,6 +20,13 @@ glue
         backbone: "window.Backbone"
         d3: "window.d3"
         dust: "window.dust"
+
+#glue
+#    .set('debug', true)
+    # adds source file annotations to bundle. for browsing code in he console.
+    # ugly. scripts eval'ed strings. impossible to read the actual bundle
+
+#glue
     #.defaults
     #    reqpath: modulePath # lib relative to this script # same as the default
 

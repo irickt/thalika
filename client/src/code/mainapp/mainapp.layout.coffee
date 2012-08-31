@@ -1,14 +1,15 @@
 ###
-Backbone = require "backbone"
-$ = require "jquery"
-_ = require "underscore"
-
 
 mainApp.vent
 mainApp.addInitializer # use layout.addInitializer
 mainApp.layout to instantiate this module
 mainApp.content to install this instance
 
+used by views eg
+        mainApp.layout.main.show view
+        mainApp.layout.navigation.show view
+used previously as controller for mainApp.router
+emits layout:rendered to start history
 
 config for the list of sub apps
 mainApp.rewardApp
@@ -19,7 +20,16 @@ mainApp.graphApp
 template, registered on dust
 ###
 
-window.MainApp.module "Layout", (layout, mainApp, Backbone, Marionette, $, _) ->
+
+
+$ = require "jquery"
+_ = require "underscore"
+Backbone = require "backbone"
+
+mainApp = require "mainapp/mainapp.js"
+
+
+window.MainApp.module "Layout", (layout) ->
 
     Layout = Backbone.Marionette.Layout.extend
         template: "main.layout"

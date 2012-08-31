@@ -1,8 +1,8 @@
-###
+
 Backbone = require "backbone"
 $ = require "jquery"
-dust = require "dust"
-###
+# dust = require "dust" # use window.dust for now. uses module.exports and exports ? ...
+# sees exports and tries to require("./dust-helpers") ??
 
 nextTick = (f) ->
     setTimeout f, 0
@@ -20,6 +20,7 @@ MainApp.vent.on "layout:rendered", ->
             #pushState: true
 
 window.MainApp = MainApp
+module.exports = mainApp = MainApp
 
 
 Backbone.Marionette.Renderer.render = (templateName, data) ->
@@ -33,7 +34,7 @@ Backbone.Marionette.Renderer.render = (templateName, data) ->
 # each route
     # triggers an event but has no callback.
     # has :param style parameters, not regex patterns.
-    # are displayed on a routeShowEvent with route part args. args must be present and in correct order.
+    # are displayed on routeShowEvent with route part args. args must be present and in correct order.
     # (tba accept trigger and replace options)
 # routePattern, routeName (for event route:routeName), routeShowEvent
 

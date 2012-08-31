@@ -1,7 +1,6 @@
-###
-Backbone = require "backbone" # window
 
-###
+
+Backbone = require "backbone"
 
 # collection is the base for filtered collections, constructed when a tag is selected
 # args are the models in the filtered collection
@@ -9,7 +8,7 @@ Backbone = require "backbone" # window
 # reset is triggered when the models are ready to go
 # (reset also triggered on fetch and sort)
 
-MainApp.Collection = Backbone.Collection.extend
+FilteredCollection = Backbone.Collection.extend
     constructor: (argmts...) ->
         args = Array::slice.call(argmts)
         Backbone.Collection::constructor.apply this, args
@@ -23,6 +22,8 @@ MainApp.Collection = Backbone.Collection.extend
         this.onResetCallbacks.run this, this
 
 
+module.exports = FilteredCollection
+#MainApp.Collection = FilteredCollection
 
 ###
 # example, itemList is a Collection

@@ -1,5 +1,5 @@
 require "mainapp/mainapp.js"
-require "mainapp/mainapp.collection.js"
+# require "mainapp/mainapp.collection.js"
 require "mainapp/mainapp.layout.js"
 require "mainapp/mainapp.routing.js"
 require "thingapp/thingapp.js"

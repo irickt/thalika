@@ -1,6 +1,4 @@
 ###
-Backbone = require "backbone"
-$ = require "jquery"
 
 mainApp.vent
 mainApp.layout
@@ -13,6 +11,9 @@ template name, registered on dust
 
 ###
 
+_ = require "underscore"
+Backbone = require "backbone"
+$ = require "jquery"
 
 thingCssName = "reward"
 thingModuleName = "reward"
@@ -35,7 +36,7 @@ commonData =
         ]
 
 
-window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule, mainApp, Backbone, Marionette, $, _) ->
+window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule, mainApp) ->
 
     Tag = Backbone.Model.extend {}
     TagCollection = Backbone.Collection.extend

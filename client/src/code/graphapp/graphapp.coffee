@@ -1,15 +1,18 @@
 ###
-Backbone = require "backbone" # window
 mainApp = require "mainapp" # window
 
 template, uses dust
 ###
 
-window.MainApp.module "graphApp", (graphApp, mainApp, Backbone, Marionette, $, _) ->
+Backbone = require "backbone"
+FilteredCollection = require "mainapp/mainapp.collection.js"
+
+
+window.MainApp.module "graphApp", (graphApp, mainApp) ->
 
     # local
     graphApp.Graph = Backbone.Model.extend {}
-    graphApp.GraphCollection = mainApp.Collection.extend
+    graphApp.GraphCollection = FilteredCollection.extend # mainApp.Collection.extend
         url: "/graph"
         model: graphApp.Graph
 

@@ -1,5 +1,4 @@
 ###
-Backbone = require "backbone"
 
 mainApp.vent
 mainApp.layout
@@ -10,13 +9,15 @@ templates, registered on dust
 
 ###
 
+Backbone = require "backbone"
+
 thingCssName = "reward"
 thingModuleName = "reward"
 #thingPathName = "rewards"
 thingEventName = "reward"
 #thingDataName = "reward"
 
-MainApp.module "accountApp.accountViews", (accountViews, mainApp, Backbone, Marionette, $, _) ->
+MainApp.module "accountApp.accountViews", (accountViews, mainApp) -> #, Backbone, Marionette, $, _
 
     serializeDataDetail = ->
 

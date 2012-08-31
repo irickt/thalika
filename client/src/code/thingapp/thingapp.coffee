@@ -1,5 +1,4 @@
 ###
-Backbone = require "backbone"
 mainApp.vent
 thingApp.Tags
 thingApp.thingViews
@@ -7,17 +6,20 @@ parent mainApp
 
 ###
 
+Backbone = require "backbone"
+FilteredCollection = require "mainapp/mainapp.collection.js"
+
 #thingCssName = "reward"
 thingModuleName = "reward"
 #thingPathName = "reward"
 thingDataName = "reward"
 thingEventName = "reward"
 
-window.MainApp.module "#{thingModuleName}App", (thingApp, mainApp, Backbone, Marionette, $, _) ->
+window.MainApp.module "#{thingModuleName}App", (thingApp, mainApp) ->
 
     thingApp.Thing = Backbone.Model.extend {}
 
-    thingApp.ThingCollection = mainApp.Collection.extend
+    thingApp.ThingCollection = FilteredCollection.extend # mainApp.Collection.extend
         url: "/data/#{thingDataName}"
         model: thingApp.Thing
 
