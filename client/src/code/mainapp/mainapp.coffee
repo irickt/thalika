@@ -1,7 +1,7 @@
 ###
 Backbone = require "backbone"
 $ = require "jquery"
-dust = require "dustjs-linkedin"
+dust = require "dust"
 ###
 
 nextTick = (f) ->

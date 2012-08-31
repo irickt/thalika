@@ -30,7 +30,8 @@ path = require 'path'
 fs   = require 'fs'
 {exec} = require 'child_process'
 
-modulePath  = path.dirname fs.realpathSync __filename # Cakefile path == process.cwd()
+modulePath  = path.dirname fs.realpathSync __filename # is the location of the Cakefile
+# process.cwd() is pwd of the shell where the Cakefile is (must be) run
 
 ###
 this is typically used twice for each task:
