@@ -1,13 +1,19 @@
+###
+Cakefile for top-level application and its clients and servers
+See template_notes.txt for general design and project layout
+
+select on config keys eg config.FOR_SERVER
+uses subproject scripts to specialize the build
 
 ###
-Cakefile is linked in client and server. Edits affect both. (See template_notes.txt)
 
-patch to fix https://github.com/jashkenas/coffee-script/pull/2373
+###
+FIX
+fix for https://github.com/jashkenas/coffee-script/pull/2373
 
 
-# cake in the application may need to build the clients and servers.
-# use spawn to exec in a subproject
-deploySh = spawn "sh", ["cake something"],
+# use spawn to exec in a subdirectory
+deploySh = spawn "sh", ["some cmd"],
     cwd: process.env.HOME + "/subproject"
     env: _.extend process.env,
         PATH: "full path to ./node_modules/.bin" + ":" + process.env.PATH
@@ -30,7 +36,9 @@ path = require 'path'
 fs   = require 'fs'
 {exec} = require 'child_process'
 
-modulePath  = path.dirname fs.realpathSync __filename # Cakefile path == process.cwd()
+modulePath  = path.dirname fs.realpathSync __filename # is the location of the Cakefile
+# process.cwd() is pwd of the shell where the Cakefile is (must be) run. so, same as modulePath.
+
 
 ###
 this is typically used twice for each task:
@@ -52,7 +60,8 @@ targetedFiles = (task, sourceFiles, regexes, compiler) ->
         dustc: "dustc --name={{data.tname}} {{ data.infile }} {{ data.outfile }}"
     for infile in sourceFiles
         outfile = infile.replace regexes[0], regexes[1]
-        tname = if infile.indexOf('.dust.html') > 0 then path.basename(infile, ".dust.html") else "" # obviously, ugly FIX
+        tname = if infile.indexOf('.dust.html') > 0 then path.basename(infile, ".dust.html") else ""
+        # obviously, ugly FIX. add a third regex
         if compiler
             tmpl = _.template cmdTemplate[compiler], null, {variable: 'data'} # 'data' is an efficiency tweak
             console.log task.target, compiler, infile, outfile
@@ -68,8 +77,8 @@ targetedFiles = (task, sourceFiles, regexes, compiler) ->
 # examples of added options
 # option '-o', '--output [DIR]', 'directory for compiled code'
 # option '-t','--tap','Run tests with tap output'
-# options.verbose applied to tests
 option '-t', '--target [TARGET]', 'Deploy to target host platform'
+# options.verbose applied to tests
 
 task 'version', 'Version number Use cake -v version for more info. ', (options) ->
     packageData = require "config/package" # FIX from config to allow initial boot of pkg.json
@@ -82,6 +91,12 @@ task 'version', 'Version number Use cake -v version for more info. ', (options) 
 
 # task 'generate', 'Generate directories and config templates (nothing fancy)', ...
     # don't replace anything that already exists
+
+task 'develop', 'Open shells. Mac and iTerm2 specific.', (options) ->
+    target = path.join modulePath, "scripts/develop.coffee"
+    if fs.existsSync target
+        exec "coffee " + target
+
 
 task 'compile:config', 'Convert package.coffee to package.json',
     ['config/package.coffee', 'config/config.coffee'],
@@ -202,9 +217,9 @@ task 'build', 'Build client or server. This does all the above.',
 
 task 'test', 'Run tests',
     ['task(build)'], (options) -> # equivalent to {recipe: (options) -> ..., outputs: []}
-        #command = "./node_modules/.bin/buster-test --config test/js/config-tests.js"
+        command = "./node_modules/.bin/buster-test --config test/js/config-tests.js"
         # depends on npm link. or use other project or env alias, or for global install ...
-        command = "/usr/local/lib/node_modules/buster/bin/buster-test --config test/js/config-tests.js"
+        #command = "/usr/local/lib/node_modules/buster/bin/buster-test --config test/config-tests.js -e browser"
         this.exec [
             command
             ]

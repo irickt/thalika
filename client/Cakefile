@@ -69,7 +69,7 @@ targetedFiles = (task, sourceFiles, regexes, compiler) ->
 # examples of added options
 # option '-o', '--output [DIR]', 'directory for compiled code'
 # option '-t','--tap','Run tests with tap output'
-option 't', '--target [TARGET]', 'Deploy to target host platform'
+option '-t', '--target [TARGET]', 'Deploy to target host platform'
 # options.verbose applied to tests
 
 task 'version', 'Version number Use cake -v version for more info. ', (options) ->
