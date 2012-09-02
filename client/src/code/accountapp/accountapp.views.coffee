@@ -17,7 +17,7 @@ thingModuleName = "reward"
 thingEventName = "reward"
 #thingDataName = "reward"
 
-MainApp.module "accountApp.accountViews", (accountViews, mainApp) -> #, Backbone, Marionette, $, _
+MainApp.module "accountApp.accountViews", (accountViews, mainApp) ->
 
     serializeDataDetail = ->
 

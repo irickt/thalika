@@ -1,5 +1,5 @@
 path = require 'path'
-packageData = require "./package"
+packageData = require "./package.coffee"
 
 config =
     base:
