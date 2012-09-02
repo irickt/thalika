@@ -1,8 +1,10 @@
 
 Backbone = require "backbone"
 $ = require "jquery"
-# dust = require "dust" # use window.dust for now. uses module.exports and exports ? ...
-# sees exports and tries to require("./dust-helpers") ??
+
+# dust = require "dust" # use window.dust for now.
+# sees exports and tries to require("./dust-helpers") ?? ...
+
 
 nextTick = (f) ->
     setTimeout f, 0
@@ -21,6 +23,19 @@ MainApp.vent.on "layout:rendered", ->
 
 window.MainApp = MainApp
 module.exports = mainApp = MainApp
+# provides mainApp.vent ... need a fancier one?
+# provides mainApp.addInitializer ... need an async version
+
+# provides mainApp.content ... the region, just one for the top layout
+# provides mainApp.layout ... after layout attaches it
+
+# provides mainApp.subApp ... provided at initialization (not module making)
+
+# provides mainApp.Routing ... replaced with Backbone.Router, see below
+
+
+
+
 
 
 Backbone.Marionette.Renderer.render = (templateName, data) ->

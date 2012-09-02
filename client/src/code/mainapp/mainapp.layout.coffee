@@ -1,13 +1,13 @@
 ###
 
+uses
 mainApp.vent
-mainApp.addInitializer # use layout.addInitializer
-mainApp.layout to instantiate this module
-mainApp.content to install this instance
+mainApp.layout to instantiates itself here
+mainApp.content to install itself
 
 used by views eg
-        mainApp.layout.main.show view
-        mainApp.layout.navigation.show view
+    mainApp.layout.main.show view
+    mainApp.layout.navigation.show view
 used previously as controller for mainApp.router
 emits layout:rendered to start history
 

@@ -1,5 +1,6 @@
+#mainApp = require "mainapp/mainapp.js"
 
-window.MainApp.module "graphApp.graphDemo", (graphDemo, mainApp) ->
+window.MainApp.module "graphApp.graphDemo", (graphDemo) ->
 
     graphDemo.demo = () ->
     # http://bl.ocks.org/1377729

@@ -1,13 +1,12 @@
-###
-mainApp.vent
-mainApp.Routing
-mainApp.addInitializer # should be thingRouting.addInitializer
-mainApp.thingApp
-parent Routing
-
-###
 
 Backbone = require "backbone"
+
+mainApp = require "mainapp/mainapp.js"
+#mainApp.vent
+#mainApp.Routing
+#mainApp.thingApp
+#parent Routing
+
 
 #thingCssName = "reward"
 thingModuleName = "reward"
@@ -15,7 +14,7 @@ thingPathName = "reward"
 thingEventName = "reward"
 #thingDataName = "reward"
 
-window.MainApp.module "Routing.#{thingModuleName}Routing", (thingRouting, mainApp) ->
+window.MainApp.module "Routing.#{thingModuleName}Routing", (thingRouting) ->
 
     # instead of defining on Routing and looking up thingApp, define on thingApp and look up Routing
 
@@ -44,7 +43,7 @@ window.MainApp.module "Routing.#{thingModuleName}Routing", (thingRouting, mainAp
 
 
     # handlers for these routes are in the "controller"
-    mainApp.addInitializer -> # mainApp.thingApp.addInitializer
+    mainApp.addInitializer ->
         thingRouting.router = new thingRouting.Router
             controller: mainApp["#{thingModuleName}App"] # look up thingApp
 

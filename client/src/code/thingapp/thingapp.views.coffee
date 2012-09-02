@@ -1,14 +1,14 @@
 ###
+templates, registered on dust
+###
+
 Backbone = require "backbone"
 
-mainApp.vent
-mainApp.layout
+mainApp = require "mainapp/mainapp.js"
+#mainApp.vent
+#mainApp.layout
+#parent thingApp
 
-parent thingApp
-
-templates, registered on dust
-
-###
 
 thingCssName = "reward"
 thingModuleName = "reward"
@@ -16,7 +16,7 @@ thingModuleName = "reward"
 thingEventName = "reward"
 #thingDataName = "reward"
 
-MainApp.module "#{thingModuleName}App.thingViews", (thingViews, mainApp, Backbone, Marionette, $, _) ->
+MainApp.module "#{thingModuleName}App.thingViews", (thingViews) ->
 
     serializeDataDetail = ->
 

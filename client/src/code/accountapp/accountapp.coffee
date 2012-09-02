@@ -1,23 +1,19 @@
 ###
-mainApp.vent
-thingApp.Tags
-thingApp.thingViews
-parent mainApp
-
+accountApp.Tags
+accountApp.accountViews
 ###
 
 Backbone = require "backbone"
 
+mainApp = require "mainapp/mainapp.js"
+# mainApp.vent
+# parent mainApp
 
-#thingCssName = "reward"
-thingModuleName = "reward"
-#thingPathName = "reward"
-thingDataName = "reward"
-thingEventName = "reward"
 
-window.MainApp.module "accountApp", (accountApp, mainApp) ->
 
-    accountApp.Thing = Backbone.Model.extend {}
+window.MainApp.module "accountApp", (accountApp) ->
+
+    accountApp.Account = Backbone.Model.extend {}
 
 
     # listen for mainApp request to show the default view
@@ -39,8 +35,8 @@ window.MainApp.module "accountApp", (accountApp, mainApp) ->
         accountApp.showAccountNew()
 
     # we're the current view, set up the navigation here (as main does too)
-    mainApp.vent.bind "#{thingEventName}app:shown", ->
-        accountApp.showNav()
+    #mainApp.vent.bind "accountapp:shown", ->
+    #    accountApp.showNav()
 
     # the "controller" for the router
     # any app url must trigger navigation set up: showTagList and app selector control

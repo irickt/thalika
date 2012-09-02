@@ -1,5 +1,4 @@
 ###
-mainApp.addInitializer -> # mainApp.thingApp.addInitializer
 mainApp.vent
 mainApp.layout # is the controller
 mainApp.Routing # events to self
@@ -44,7 +43,7 @@ window.MainApp.module "Routing", (routing) ->
             "graph":  "showGraphApp" # remove when graphApp has a router
 
     # handlers for these routes are in the "controller"
-    mainApp.addInitializer -> # mainApp.thingApp.addInitializer
+    mainApp.addInitializer ->
         routing.router = new routing.Router
             #controller: mainApp.layout
             controller: mainApp.Routing

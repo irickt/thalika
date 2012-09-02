@@ -1,16 +1,16 @@
 ###
-
-mainApp.vent
-mainApp.layout
-
-parent thingApp
-
+parent accountApp
 templates, registered on dust
-
 ###
 
 Backbone = require "backbone"
 $ = require "jquery"
+
+mainApp = require "mainapp/mainapp.js"
+# mainApp.vent
+# mainApp.layout
+
+
 
 thingCssName = "reward"
 thingModuleName = "reward"
@@ -18,7 +18,7 @@ thingModuleName = "reward"
 thingEventName = "reward"
 #thingDataName = "reward"
 
-MainApp.module "accountApp.accountViews", (accountViews, mainApp) ->
+MainApp.module "accountApp.accountViews", (accountViews) ->
 
     dogs = new Backbone.Collection(model: Backbone.Model)
     dogs.add

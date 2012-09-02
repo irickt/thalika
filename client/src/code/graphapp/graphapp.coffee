@@ -1,14 +1,14 @@
 ###
-mainApp = require "mainapp" # window
 
 template, uses dust
 ###
 
 Backbone = require "backbone"
 FilteredCollection = require "mainapp/mainapp.collection.js"
+mainApp = require "mainapp/mainapp.js"
 
 
-window.MainApp.module "graphApp", (graphApp, mainApp) ->
+window.MainApp.module "graphApp", (graphApp) ->
 
     # local
     graphApp.Graph = Backbone.Model.extend {}
@@ -50,11 +50,4 @@ window.MainApp.module "graphApp", (graphApp, mainApp) ->
     # actually make a view and show it
     mainApp.vent.bind "graph:show", ->
         GraphView.showGraph()
-
-
-
-
-    #graphApp.addInitializer ->
-        #graphApp.itemList = new graphApp.GraphCollection()
-        #graphApp.itemList.fetch()
 

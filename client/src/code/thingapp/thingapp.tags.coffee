@@ -1,19 +1,17 @@
 ###
-
-mainApp.vent
-mainApp.layout
 tagsModule.tagsView
-
 parent thingApp
-
-
 template name, registered on dust
-
 ###
 
 _ = require "underscore"
 Backbone = require "backbone"
 $ = require "jquery"
+
+mainApp = require "mainapp/mainapp.js"
+#mainApp.vent
+#mainApp.layout
+
 
 thingCssName = "reward"
 thingModuleName = "reward"
@@ -36,7 +34,7 @@ commonData =
         ]
 
 
-window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule, mainApp) ->
+window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule) ->
 
     Tag = Backbone.Model.extend {}
     TagCollection = Backbone.Collection.extend
