@@ -69,3 +69,4 @@ window.MainApp.module "accountApp", (accountApp, mainApp) ->
     mainApp.router.bindRoute "account", "account", "accountapp:shown"
     #mainApp.router.bindRoute "account/new", "account:new", "accountapp:new:shown"
     mainApp.router.bindRoute "account/:test", "account:test", "accountapp:test:shown"
+
