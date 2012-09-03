@@ -1,7 +1,6 @@
 ###
 tagsModule.tagsView
 parent thingApp
-template name, registered on dust
 ###
 
 _ = require "underscore"
@@ -9,9 +8,10 @@ Backbone = require "backbone"
 $ = require "jquery"
 
 mainApp = require "mainapp/mainapp.js"
-#mainApp.vent
+vent = mainApp.vent
 #mainApp.layout
 
+# require template(s)
 
 thingCssName = "reward"
 thingModuleName = "reward"
@@ -58,9 +58,10 @@ window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule) ->
             e.preventDefault()
             tag = $(e.currentTarget).data("tag")
             if tag
-                mainApp.vent.trigger "#{thingEventName}:tag:show", tag
+                vent.trigger "#{thingEventName}:tag:show", tag
+                vent.trigger "#{thingEventName}:appshown", "tag", tag # set url
             else
-                mainApp.vent.trigger "#{thingEventName}:show"
+                vent.trigger "#{thingEventName}:appshown" # set url
 
 
     # display the tags view

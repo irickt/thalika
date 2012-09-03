@@ -1,14 +1,12 @@
-###
-templates, registered on dust
-###
 
 Backbone = require "backbone"
 
 mainApp = require "mainapp/mainapp.js"
-#mainApp.vent
+vent = mainApp.vent
 #mainApp.layout
 #parent thingApp
 
+# require template(s)
 
 thingCssName = "reward"
 thingModuleName = "reward"
@@ -37,7 +35,8 @@ MainApp.module "#{thingModuleName}App.thingViews", (thingViews) ->
         events:
             click: "showItemDetail"
         showItemDetail: (e) ->
-            mainApp.vent.trigger "#{thingEventName}:item:show", this.model.id # trigger on thingApp
+            vent.trigger "#{thingEventName}:item:show", this.model.id # trigger on thingApp
+            vent.trigger "#{thingEventName}:appshown", this.model.id # set url
 
     # thing list view, renders the individual thing previews
     ListView = Backbone.Marionette.CollectionView.extend

@@ -1,12 +1,13 @@
 ###
-accountApp.Tags
+accountApp.Nav
 accountApp.accountViews
 ###
 
 Backbone = require "backbone"
 
 mainApp = require "mainapp/mainapp.js"
-# mainApp.vent
+vent = mainApp.vent
+router = mainApp.router
 # parent mainApp
 
 
@@ -15,54 +16,27 @@ window.MainApp.module "accountApp", (accountApp) ->
 
     accountApp.Account = Backbone.Model.extend {}
 
+    # two-way "binding" to the browser's address bar
+    router.bindRoutes "account"
 
-    # listen for mainApp request to show the default view
-    mainApp.router.bind "route:account", ->
-        console.log "event", "route:account"
-        mainApp.vent.trigger "accountapp:show"
-    mainApp.vent.bind "accountapp:show", ->
-        console.log "event", "accountapp:show"
+    # triggered by router or by internal navigation
+    vent.bind "account:appshow", (args...) ->
+        vent.trigger "account:appshown", args...
         accountApp.showAccount()
 
-    mainApp.router.bind "route:account:test", (test) ->
-        console.log "event", "route:account:test", test
-
-    mainApp.router.bind "route:account:new", ->
-        console.log "event", "route:account:new"
-        mainApp.vent.trigger "accountapp:new:show"
-    mainApp.vent.bind "accountapp:new:show", ->
-        console.log "event", "accountapp:new:show"
-        accountApp.showAccountNew()
-
-    # we're the current view, set up the navigation here (as main does too)
-    #mainApp.vent.bind "accountapp:shown", ->
-    #    accountApp.showNav()
-
-    # the "controller" for the router
-    # any app url must trigger navigation set up: showTagList and app selector control
-    # in effect incoming urls must pass through app level controller
-
-    # router handler: show all items
     accountApp.showAccount = ->
-        mainApp.vent.trigger "account:show"
-        mainApp.vent.trigger "accountapp:shown"
-
-    accountApp.showNav = ->
-        # compare to tags
-
-
-    # bind show events to display actions
-    # triggered by nav click or route or initialization
-
-    mainApp.vent.bind "account:show", ->
+        vent.trigger "account:views:show"
+    # just call it since we own it, or decouple with event
+    vent.bind "account:views:show", ->
         accountApp.accountViews.showAccount()
 
-    mainApp.vent.bind "account:show:new", ->
-        accountApp.accountViews.showAccountNew()
+    # any app url will trigger navigation set up
+    vent.bind "account:appshown", (args...) ->
+        accountApp.showNav()
+
+    accountApp.showNav = ->
+        # as for thing tags
+        # send event/call
 
 
-    # two-way "binding" to the browser's address bar
-    mainApp.router.bindRoute "account", "account", "accountapp:shown"
-    #mainApp.router.bindRoute "account/new", "account:new", "accountapp:new:shown"
-    mainApp.router.bindRoute "account/:test", "account:test", "accountapp:test:shown"
 

@@ -1,6 +1,5 @@
 ###
 parent accountApp
-templates, registered on dust
 ###
 
 Backbone = require "backbone"
@@ -10,6 +9,7 @@ mainApp = require "mainapp/mainapp.js"
 # mainApp.vent
 # mainApp.layout
 
+# require template(s)
 
 
 thingCssName = "reward"

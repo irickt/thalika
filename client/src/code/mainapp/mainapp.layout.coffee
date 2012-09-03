@@ -1,10 +1,4 @@
 ###
-
-uses
-mainApp.vent
-mainApp.layout to instantiates itself here
-mainApp.content to install itself
-
 used by views eg
     mainApp.layout.main.show view
     mainApp.layout.navigation.show view
@@ -15,9 +9,6 @@ config for the list of sub apps
 mainApp.rewardApp
 mainApp.accountApp
 mainApp.graphApp
-
-
-template, registered on dust
 ###
 
 
@@ -27,6 +18,11 @@ _ = require "underscore"
 Backbone = require "backbone"
 
 mainApp = require "mainapp/mainapp.js"
+#mainApp.vent
+#mainApp.layout instantiate itself here
+#mainApp.content to install itself
+
+# require template(s)
 
 
 window.MainApp.module "Layout", (layout) ->
@@ -40,7 +36,7 @@ window.MainApp.module "Layout", (layout) ->
             main: "#main"
 
         events:
-            "change #app-selector select": "appChanged"
+            "change #app-selector select": "appChanged" # make navigation a separate region?
 
         initialize: ->
             # `setSelection` always runs with this view as context
@@ -61,11 +57,11 @@ window.MainApp.module "Layout", (layout) ->
         # set the select popup from the app eg a url
         setupAppSelectionEvents: ->
             that = this # doesn't bindAll do this?
-            mainApp.vent.bind "rewardapp:shown", ->
+            mainApp.vent.bind "reward:appshown", ->
                 that.setSelection "rewards"
-            mainApp.vent.bind "accountapp:shown", ->
+            mainApp.vent.bind "account:appshown", ->
                 that.setSelection "account"
-            mainApp.vent.bind "graphapp:shown", ->
+            mainApp.vent.bind "graph:appshown", ->
                 that.setSelection "graph"
 
         # set the app from the select popup
@@ -73,11 +69,11 @@ window.MainApp.module "Layout", (layout) ->
             e.preventDefault()
             appName = $(e.currentTarget).val()
             if appName is "rewards"
-                mainApp.vent.trigger "rewardapp:show"
+                mainApp.vent.trigger "reward:appshow"
             if appName is "account"
-                mainApp.vent.trigger "accountapp:show"
+                mainApp.vent.trigger "account:appshow"
             else if appName is "graph"
-                mainApp.vent.trigger "graphapp:show"
+                mainApp.vent.trigger "graph:appshow"
 
 
 

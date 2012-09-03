@@ -8,12 +8,14 @@ Backbone = require "backbone"
 FilteredCollection = require "mainapp/mainapp.collection.js"
 
 mainApp = require "mainapp/mainapp.js"
-# mainApp.vent
+router = mainApp.router
+vent = mainApp.vent
+# vent
 # parent mainApp
 
 #thingCssName = "reward"
 thingModuleName = "reward"
-#thingPathName = "reward"
+thingPathName = "reward"
 thingDataName = "reward"
 thingEventName = "reward"
 
@@ -34,33 +36,54 @@ window.MainApp.module "#{thingModuleName}App", (thingApp) ->
             return new thingApp.ThingCollection filteredItems
 
 
-    # listen for mainApp request to show the default view
-    mainApp.vent.bind "#{thingEventName}app:show", ->
-        thingApp.showItemsList()
+    router.bindRoutes thingEventName
 
-    # we're the current view, set up the navigation here (as main does too)
-    mainApp.vent.bind "#{thingEventName}app:shown", ->
+    vent.bind "#{thingEventName}:appshow", (args...) ->
+        vent.trigger "#{thingEventName}:appshown", args...
+        thingApp.showThing args...
+
+    # router handler: show all items
+    thingApp.showThing = (args...) ->
+        # parse and validate args
+        if !args[0]
+            vent.trigger "#{thingEventName}:show"
+        else if args[0] == "tag"
+            vent.trigger "#{thingEventName}:tag:show", args[1] # tagName
+        else
+            vent.trigger "#{thingEventName}:item:show", args[0] # itemId
+
+
+    # any app url will trigger navigation set up
+    vent.bind "#{thingEventName}:appshown", ->
         thingApp.Tags.showTagList()
 
-    # the "controller" for the router
-    # any app url must trigger navigation set up: showTagList and app selector control
-    # in effect incoming urls must pass through app level controller
+    ###
+
+    # listen for mainApp request to show the default view
+    vent.bind "#{thingEventName}app:show", ->
+        thingApp.showItemsList()
+
+    # any app url will trigger navigation set up
+    vent.bind "#{thingEventName}app:shown", ->
+        thingApp.Tags.showTagList()
+
 
     # router handler: show all items
     thingApp.showItemsList = ->
-        mainApp.vent.trigger "#{thingEventName}:show"
-        mainApp.vent.trigger "#{thingEventName}app:shown"
+        vent.trigger "#{thingEventName}:show"
+        vent.trigger "#{thingEventName}app:shown"
 
     # router handler: show items for the given tag
     thingApp.showItemsByTag = (tag) ->
-        mainApp.vent.trigger "#{thingEventName}:tag:show", tag
-        mainApp.vent.trigger "#{thingEventName}app:shown"
+        vent.trigger "#{thingEventName}:tag:show", tag
+        vent.trigger "#{thingEventName}app:shown"
 
     # router handler: show item detail, by id
     thingApp.showItemDetail = (itemId) ->
-        mainApp.vent.trigger "#{thingEventName}:item:show", itemId
-        mainApp.vent.trigger "#{thingEventName}app:shown"
+        vent.trigger "#{thingEventName}:item:show", itemId
+        vent.trigger "#{thingEventName}app:shown"
 
+    ###
 
 
     # register a callback to fire when collection is reset, which is triggered by tag change
@@ -80,15 +103,15 @@ window.MainApp.module "#{thingModuleName}App", (thingApp) ->
     # triggered by tag click or route or initialization
 
     # show all the items
-    mainApp.vent.bind "#{thingEventName}:show", ->
+    vent.bind "#{thingEventName}:show", ->
         displayItemsFilteredBy()
 
     # show items filtered by tag
-    mainApp.vent.bind "#{thingEventName}:tag:show", (tag) ->
+    vent.bind "#{thingEventName}:tag:show", (tag) ->
         displayItemsFilteredBy tag
 
     # show one item
-    mainApp.vent.bind "#{thingEventName}:item:show", (itemId) ->
+    vent.bind "#{thingEventName}:item:show", (itemId) ->
         displayItem itemId
 
 

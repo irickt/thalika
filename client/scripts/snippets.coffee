@@ -1,3 +1,22 @@
+
+
+_ = require "underscore"
+
+console.log _.map [], ->
+
+###
+
+a0 = []
+a2 = ["x", 2]
+mk = (s, a) ->
+    a.unshift s
+    console.log a
+    console.log a.join "/"
+
+mk "r", a0
+mk "s", a2
+
+
 a = 5
 for i in [0..(a-1)]
     console.log i
@@ -24,3 +43,4 @@ sub = (pattern, args...) ->
 vals = [1, "c"]
 
 console.log sub "/post/:id/:title", vals...
+###
