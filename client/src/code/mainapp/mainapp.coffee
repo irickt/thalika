@@ -30,7 +30,7 @@ module.exports = mainApp = MainApp
 # provides mainApp.content ... the region, just one for the top layout
 # provides mainApp.layout ... after layout attaches it
 
-# provides mainApp.subApp ... provided at initialization
+# provides mainApp.subApp ... make them from config or introspection of modules
 
 
 

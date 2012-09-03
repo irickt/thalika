@@ -2,7 +2,6 @@
 used by views eg
     mainApp.layout.main.show view
     mainApp.layout.navigation.show view
-used previously as controller for mainApp.router
 emits layout:rendered to start history
 
 config for the list of sub apps
@@ -10,7 +9,6 @@ mainApp.rewardApp
 mainApp.accountApp
 mainApp.graphApp
 ###
-
 
 
 $ = require "jquery"
@@ -24,12 +22,20 @@ mainApp = require "mainapp/mainapp.js"
 
 # require template(s)
 
+appList =
+    reward: "Rewards"
+    account: "Account"
+    graph: "Graph"
+# add Home
+# make the apps from configuration
 
 window.MainApp.module "Layout", (layout) ->
 
     Layout = Backbone.Marionette.Layout.extend
+        appList: appList
+
         template: "main.layout"
-        #serializeData:
+        #serializeData: # pass appList to template
 
         regions:
             navigation: "#navigation"
@@ -47,33 +53,32 @@ window.MainApp.module "Layout", (layout) ->
 
 
         # the two-way "binding" to the app select popup
-        # main makes the apps from configuration, API to modify any control references then
-        # and have the template use a list instead of hard code, along with "Home"
+
+        # set the app from the select popup
+        appChanged: (e) ->
+            e.preventDefault()
+            key = $(e.currentTarget).val()
+            if key in _.keys this.appList
+                 vent.trigger "#{key}:appshow"
 
         # show the correct app in the select popup.
         setSelection: (app) ->
             this.$("select").val app
 
+        # two good js lessons here that could be clearer
+        #   binding to this (the view)
+        #       that = this below is necessary but bindAll above isn't
+        #       consider =>
+        #   closure on values of key in the loop
+        #       http://james.padolsey.com/javascript/closures-in-javascript/
+
         # set the select popup from the app eg a url
         setupAppSelectionEvents: ->
-            that = this # doesn't bindAll do this?
-            vent.bind "reward:appshown", ->
-                that.setSelection "rewards"
-            vent.bind "account:appshown", ->
-                that.setSelection "account"
-            vent.bind "graph:appshown", ->
-                that.setSelection "graph"
-
-        # set the app from the select popup
-        appChanged: (e) ->
-            e.preventDefault()
-            appName = $(e.currentTarget).val()
-            if appName is "rewards"
-                vent.trigger "reward:appshow"
-            if appName is "account"
-                vent.trigger "account:appshow"
-            else if appName is "graph"
-                vent.trigger "graph:appshow"
+            that = this
+            setSel = (key) ->
+                -> that.setSelection key
+            for key in _.keys this.appList
+                vent.bind "#{key}:appshown", (setSel key)
 
 
 
