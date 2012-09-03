@@ -5,8 +5,8 @@ parent accountApp
 Backbone = require "backbone"
 $ = require "jquery"
 
+{vent} = require "mainapp/mainapp.js"
 mainApp = require "mainapp/mainapp.js"
-# mainApp.vent
 # mainApp.layout
 
 # require template(s)
@@ -121,7 +121,7 @@ MainApp.module "accountApp.accountViews", (accountViews) ->
         events:
             click: "showItemDetail"
         showItemDetail: (e) ->
-            mainApp.vent.trigger "account:detail:show", this.model.id # trigger on thingApp
+            vent.trigger "account:detail:show", this.model.id # trigger on thingApp
 
 
     # public methods called by "controller" ie accountApp

@@ -1,10 +1,10 @@
+#parent thingApp
 
 Backbone = require "backbone"
 
+{vent} = require "mainapp/mainapp.js"
 mainApp = require "mainapp/mainapp.js"
-vent = mainApp.vent
 #mainApp.layout
-#parent thingApp
 
 # require template(s)
 

@@ -1,15 +1,11 @@
 ###
+# parent mainApp
 accountApp.Nav
 accountApp.accountViews
 ###
 
 Backbone = require "backbone"
-
-mainApp = require "mainapp/mainapp.js"
-vent = mainApp.vent
-router = mainApp.router
-# parent mainApp
-
+{vent, router} = require "mainapp/mainapp.js"
 
 
 window.MainApp.module "accountApp", (accountApp) ->

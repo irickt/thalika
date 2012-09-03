@@ -2,9 +2,8 @@
 
 Backbone = require "backbone"
 FilteredCollection = require "mainapp/mainapp.collection.js"
+{vent, router} = require "mainapp/mainapp.js"
 mainApp = require "mainapp/mainapp.js"
-router = mainApp.router
-vent = mainApp.vent
 #layout = mainApp.layout
 # require template(s)
 

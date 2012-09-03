@@ -2,16 +2,14 @@
 thingApp.Tags
 thingApp.thingViews
 
+# parent mainApp
 ###
 
 Backbone = require "backbone"
 FilteredCollection = require "mainapp/mainapp.collection.js"
 
-mainApp = require "mainapp/mainapp.js"
-router = mainApp.router
-vent = mainApp.vent
-# vent
-# parent mainApp
+{router, vent} = require "mainapp/mainapp.js"
+
 
 #thingCssName = "reward"
 thingModuleName = "reward"
@@ -23,7 +21,7 @@ window.MainApp.module "#{thingModuleName}App", (thingApp) ->
 
     thingApp.Thing = Backbone.Model.extend {}
 
-    thingApp.ThingCollection = FilteredCollection.extend # mainApp.Collection.extend
+    thingApp.ThingCollection = FilteredCollection.extend
         url: "/data/#{thingDataName}"
         model: thingApp.Thing
 
@@ -56,34 +54,6 @@ window.MainApp.module "#{thingModuleName}App", (thingApp) ->
     # any app url will trigger navigation set up
     vent.bind "#{thingEventName}:appshown", ->
         thingApp.Tags.showTagList()
-
-    ###
-
-    # listen for mainApp request to show the default view
-    vent.bind "#{thingEventName}app:show", ->
-        thingApp.showItemsList()
-
-    # any app url will trigger navigation set up
-    vent.bind "#{thingEventName}app:shown", ->
-        thingApp.Tags.showTagList()
-
-
-    # router handler: show all items
-    thingApp.showItemsList = ->
-        vent.trigger "#{thingEventName}:show"
-        vent.trigger "#{thingEventName}app:shown"
-
-    # router handler: show items for the given tag
-    thingApp.showItemsByTag = (tag) ->
-        vent.trigger "#{thingEventName}:tag:show", tag
-        vent.trigger "#{thingEventName}app:shown"
-
-    # router handler: show item detail, by id
-    thingApp.showItemDetail = (itemId) ->
-        vent.trigger "#{thingEventName}:item:show", itemId
-        vent.trigger "#{thingEventName}app:shown"
-
-    ###
 
 
     # register a callback to fire when collection is reset, which is triggered by tag change

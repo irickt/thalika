@@ -17,8 +17,8 @@ $ = require "jquery"
 _ = require "underscore"
 Backbone = require "backbone"
 
+{vent} = require "mainapp/mainapp.js"
 mainApp = require "mainapp/mainapp.js"
-#mainApp.vent
 #mainApp.layout instantiate itself here
 #mainApp.content to install itself
 
@@ -57,11 +57,11 @@ window.MainApp.module "Layout", (layout) ->
         # set the select popup from the app eg a url
         setupAppSelectionEvents: ->
             that = this # doesn't bindAll do this?
-            mainApp.vent.bind "reward:appshown", ->
+            vent.bind "reward:appshown", ->
                 that.setSelection "rewards"
-            mainApp.vent.bind "account:appshown", ->
+            vent.bind "account:appshown", ->
                 that.setSelection "account"
-            mainApp.vent.bind "graph:appshown", ->
+            vent.bind "graph:appshown", ->
                 that.setSelection "graph"
 
         # set the app from the select popup
@@ -69,11 +69,11 @@ window.MainApp.module "Layout", (layout) ->
             e.preventDefault()
             appName = $(e.currentTarget).val()
             if appName is "rewards"
-                mainApp.vent.trigger "reward:appshow"
+                vent.trigger "reward:appshow"
             if appName is "account"
-                mainApp.vent.trigger "account:appshow"
+                vent.trigger "account:appshow"
             else if appName is "graph"
-                mainApp.vent.trigger "graph:appshow"
+                vent.trigger "graph:appshow"
 
 
 
@@ -83,7 +83,7 @@ window.MainApp.module "Layout", (layout) ->
         # when the layout has been rendered, start the application ie Backbone.history.start()
         # this loads before Backbone? show should be after the promise resolves
         mainApp.layout.on "show", ->
-            mainApp.vent.trigger "layout:rendered"
+            vent.trigger "layout:rendered"
 
         # put the layout in the content region
         mainApp.content.show mainApp.layout
@@ -93,25 +93,5 @@ window.MainApp.module "Layout", (layout) ->
 
 
 
-
-
-
-        # the controller for mainApp, delegated from the router
-
-        # public methods called by router
-        # *** just let the router send the events
-        #showRewardApp: ->
-        #    mainApp.vent.trigger "rewardapp:show"
-        #showGraphApp: ->
-        #    mainApp.vent.trigger "graphapp:show"
-
-
-    # in the "view"
-    # *** just have the app listen for its event, which it has installed in main
-    # actually show the apps
-    #mainApp.vent.bind "rewardapp:show", ->
-    #    mainApp.rewardApp.showItemsList()
-    #mainApp.vent.bind "graphapp:show", ->
-    #    mainApp.graphApp.showGraph()
 
 

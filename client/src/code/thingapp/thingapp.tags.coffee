@@ -7,8 +7,8 @@ _ = require "underscore"
 Backbone = require "backbone"
 $ = require "jquery"
 
+{vent} = require "mainapp/mainapp.js"
 mainApp = require "mainapp/mainapp.js"
-vent = mainApp.vent
 #mainApp.layout
 
 # require template(s)
