@@ -65,6 +65,39 @@ MainApp.module "accountApp.accountViews", (accountViews) ->
 
     serializeDataPreview = ->
 
+    bindings =
+        firstName: "[name=firstName]"
+        lastName: "[name=lastName]"
+        driversLicense: "[name=driversLicense]"
+        motorcycle_license: "[name=motorcycleLicense]"
+        #graduated: "[name=graduated]"
+        #eyeColor: "[name=eyeColor]"
+        graduated: [
+            selector: "[name=graduated]"
+        ,
+            selector: "[name=driversLicense],[name=motorcycleLicense]"
+            elAttribute: "enabled"
+            converter: (direction, value) ->
+                value is "yes"
+        ]
+        eyeColor: [
+            selector: "[name=eyeColor]"
+        ,
+            selector: "span.label"
+            elAttribute: "style"
+            converter: (direction, value) ->
+                "color:" + value
+        ]
+        phone:
+            selector: "[name=phone]"
+            converter: phoneConverter
+        dog:
+            selector: "[name=dog]"
+            converter: (new Backbone.ModelBinder.CollectionConverter(dogs)).convert
+        bigText: "[name=bigText]"
+
+
+
     # contents of the account
     AccountView = Backbone.Marionette.ItemView.extend
         tagName: "div"
@@ -77,41 +110,7 @@ MainApp.module "accountApp.accountViews", (accountViews) ->
         initialize: ->
             this._modelBinder = new Backbone.ModelBinder()
         onRender: ->
-            # this.$el.html html
-            bindings =
-                firstName: "[name=firstName]"
-                lastName: "[name=lastName]"
-                driversLicense: "[name=driversLicense]"
-                motorcycle_license: "[name=motorcycleLicense]"
-                #graduated: "[name=graduated]"
-                #eyeColor: "[name=eyeColor]"
-                graduated: [
-                    selector: "[name=graduated]"
-                ,
-                    selector: "[name=driversLicense],[name=motorcycleLicense]"
-                    elAttribute: "enabled"
-                    converter: (direction, value) ->
-                        value is "yes"
-                ]
-                eyeColor: [
-                    selector: "[name=eyeColor]"
-                ,
-                    selector: "span.label"
-                    elAttribute: "style"
-                    converter: (direction, value) ->
-                        "color:" + value
-                ]
-
-                phone:
-                    selector: "[name=phone]"
-                    converter: phoneConverter
-                dog:
-                    selector: "[name=dog]"
-                    converter: (new Backbone.ModelBinder.CollectionConverter(dogs)).convert
-                bigText: "[name=bigText]"
-
             this._modelBinder.bind this.model, this.$el, bindings
-            this
 
     # form for account data
     AccountFormView = Backbone.Marionette.ItemView.extend

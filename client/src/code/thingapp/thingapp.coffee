@@ -17,31 +17,29 @@ thingPathName = "reward"
 thingDataName = "reward"
 thingEventName = "reward"
 
+
+
+Thing = Backbone.Model.extend {}
+
+ThingCollection = FilteredCollection.extend
+    url: "/data/#{thingDataName}"
+    model: Thing
+
+    # filter items by tag or all items if no tag
+    forTag: (tag) ->
+        return this unless tag
+        filteredItems = this.filter (item) ->
+            tags = item.get "tags"
+            return tags.indexOf(tag) >= 0
+        return new ThingCollection filteredItems
+
+
 window.MainApp.module "#{thingModuleName}App", (thingApp) ->
-
-    thingApp.Thing = Backbone.Model.extend {}
-
-    thingApp.ThingCollection = FilteredCollection.extend
-        url: "/data/#{thingDataName}"
-        model: thingApp.Thing
-
-        # filter items by tag or all items if no tag
-        forTag: (tag) ->
-            return this unless tag
-            filteredItems = this.filter (item) ->
-                tags = item.get "tags"
-                return tags.indexOf(tag) >= 0
-            return new thingApp.ThingCollection filteredItems
-
 
     router.bindRoutes thingEventName
 
-    vent.bind "#{thingEventName}:appshow", (args...) ->
-        vent.trigger "#{thingEventName}:appshown", args...
-        thingApp.showThing args...
-
     # router handler: show all items
-    thingApp.showThing = (args...) ->
+    showThing = (args...) ->
         # parse and validate args
         if !args[0]
             vent.trigger "#{thingEventName}:show"
@@ -49,6 +47,10 @@ window.MainApp.module "#{thingModuleName}App", (thingApp) ->
             vent.trigger "#{thingEventName}:tag:show", args[1] # tagName
         else
             vent.trigger "#{thingEventName}:item:show", args[0] # itemId
+
+    vent.bind "#{thingEventName}:appshow", (args...) ->
+        vent.trigger "#{thingEventName}:appshown", args...
+        showThing args...
 
 
     # any app url will trigger navigation set up
@@ -87,6 +89,6 @@ window.MainApp.module "#{thingModuleName}App", (thingApp) ->
 
 
     thingApp.addInitializer ->
-        thingApp.itemList = new thingApp.ThingCollection()
+        thingApp.itemList = new ThingCollection()
         thingApp.itemList.fetch()
 

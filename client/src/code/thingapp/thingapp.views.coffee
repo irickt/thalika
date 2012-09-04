@@ -16,12 +16,12 @@ thingEventName = "reward"
 
 MainApp.module "#{thingModuleName}App.thingViews", (thingViews) ->
 
-    serializeDataDetail = ->
-
-    serializeDataPreview = ->
+    #serializeDataDetail = ->
+    #serializeDataPreview = ->
 
     # full contents of the thing
     ItemDetailView = Backbone.Marionette.ItemView.extend
+        # in the region, make this tag (default is div, or pass in `el:`) with these classes, puts the template in it
         tagName: "ul"
         className: "#{thingCssName}-list #{thingCssName}-view"
         template: "thing.detail" #  "#{thingCssName}.detail"
@@ -40,6 +40,7 @@ MainApp.module "#{thingModuleName}App.thingViews", (thingViews) ->
 
     # thing list view, renders the individual thing previews
     ListView = Backbone.Marionette.CollectionView.extend
+        # in the region, make this tag with these classes, puts a list of these views in it
         tagName: "ul"
         className: "#{thingCssName}-list"
         itemView: ItemInListView
