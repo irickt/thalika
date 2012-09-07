@@ -30,9 +30,9 @@ module.exports = FilteredCollection
 
     # register a callback to fire when collection is reset, which is triggered by tag change
     displayItemsFilteredBy = (tag) ->
-        thingApp.itemList.onReset (list) ->
+        itemList.onReset (list) ->
             # the collection is ready
             filteredItems = list.forTag tag
-            thingApp.thingViews.showList filteredItems # actually make a view and show it
+            views.showList filteredItems # actually make a view and show it
 
 ###

@@ -1,0 +1,6 @@
+{
+    "TITLE": "tahlika-application",
+    "DESCRIPTION": "Project template using Node.js Backbone.js Marionette Dustjs D3",
+    "VERSION": "0.0.1",
+    "FOR_BROWSER": true
+}

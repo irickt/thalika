@@ -13,7 +13,7 @@ FilteredCollection = require "mainapp/mainapp.collection.js"
 
 #thingCssName = "reward"
 thingModuleName = "reward"
-thingPathName = "reward"
+#thingPathName = "reward"
 thingDataName = "reward"
 thingEventName = "reward"
 

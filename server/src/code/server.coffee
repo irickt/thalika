@@ -1,6 +1,6 @@
 #!/usr/bin/env coffee
 
-config = require "../../config/js/config.js" # "../../config/config" #
+config = require "config.json"
 sample = require "./sample"
 
 _ = require "underscore"

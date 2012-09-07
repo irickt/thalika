@@ -1,5 +1,4 @@
 ###
-tagsModule.tagsView
 parent thingApp
 ###
 
@@ -34,22 +33,30 @@ commonData =
         ]
 
 
+
+Tag = Backbone.Model.extend {}
+
+TagCollection = Backbone.Collection.extend
+    url: "/data/#{thingDataName}tags" # pass to constructor?
+    model: Tag
+
+
+
 window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule) ->
 
-    Tag = Backbone.Model.extend {}
-    TagCollection = Backbone.Collection.extend
-        url: "/data/#{thingDataName}tags"
-        model: Tag
-
-    serializeData = ->
+    xserializeData = ->
         _.extend commonData,
             customTags: tagsModule.tagCollection.toJSON()
         # context is view
 
     # view for the list of tags. standard tags hard coded plus dynamic tags
-    tagsModule.tagsView = Backbone.Marionette.ItemView.extend
+    TagsView = Backbone.Marionette.ItemView.extend
         template: "thing.tags"  #  "#{thingCssName}.tags"
-        serializeData: serializeData
+        serializeData: xserializeData
+        #serializeData:  =>
+        #    _.extend commonData,
+        #        customTags: this.collection.toJSON()
+        # async problem, see below
 
         events:
             "click a": "tagClicked"
@@ -64,9 +71,12 @@ window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule) ->
                 vent.trigger "#{thingEventName}:appshown" # set url
 
 
+
+
+    # called by thingApp
     # display the tags view
     tagsModule.showTagList = ->
-        view = new tagsModule.tagsView
+        view = new TagsView
             collection: tagsModule.tagCollection
         mainApp.layout.navigation.show view
 
@@ -76,10 +86,11 @@ window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule) ->
         tagsModule.tagCollection = new TagCollection()
         promise = tagsModule.tagCollection.fetch() # returns jqXHR promise
         # initializer is implemented as a deferred, but doesn't wait on deferreds.
+        # so showTagList is called before the tagCollection is ready
 
         #test
-        promise.done ->
-            tagsModule.serializeData = serializeData()
+        #promise.done ->
+        #    tagsModule.serializeData = serializeData()
 
     console.log "tagsModule", this
 
