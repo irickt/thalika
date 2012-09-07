@@ -34,8 +34,6 @@ module.exports = mainApp = MainApp
 
 
 
-
-
 # router
 
 nextTick = (f) -> setTimeout f, 0
@@ -79,4 +77,15 @@ Backbone.Router::bindRoutes = (routeName) ->
 
 # only one router is needed. it has no state (confirm) and is only an interface to Backbone.history
 MainApp.router = new Backbone.Router()
+
+
+
+
+AccountApp = require "accountapp/accountapp.js"
+console.log "AccountApp.prototype", AccountApp.prototype
+
+mainApp.accountApp = new AccountApp()
+# reference not used, communication by events
+# app registers on load, then registered apps are made here (or on demand)
+console.log "accountApp", mainApp.accountApp
 
