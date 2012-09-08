@@ -1,16 +1,15 @@
-###
-parent thingApp
-###
 
 _ = require "underscore"
 Backbone = require "backbone"
 $ = require "jquery"
+#async = require "async"
 
 {vent} = require "mainapp/mainapp.js"
 mainApp = require "mainapp/mainapp.js"
 #mainApp.layout
 
 # require template(s)
+
 
 thingCssName = "reward"
 thingModuleName = "reward"
@@ -42,57 +41,48 @@ TagCollection = Backbone.Collection.extend
 
 
 
-window.MainApp.module "#{thingModuleName}App.Tags", (tagsModule) ->
-
-    xserializeData = ->
-        _.extend commonData,
-            customTags: tagsModule.tagCollection.toJSON()
-        # context is view
-
-    # view for the list of tags. standard tags hard coded plus dynamic tags
-    TagsView = Backbone.Marionette.ItemView.extend
-        template: "thing.tags"  #  "#{thingCssName}.tags"
-        serializeData: xserializeData
-        #serializeData:  =>
-        #    _.extend commonData,
-        #        customTags: this.collection.toJSON()
-        # async problem, see below
-
-        events:
-            "click a": "tagClicked"
-
-        tagClicked: (e) ->
-            e.preventDefault()
-            tag = $(e.currentTarget).data("tag")
-            if tag
-                vent.trigger "#{thingEventName}:tag:show", tag
-                vent.trigger "#{thingEventName}:appshown", "tag", tag # set url
-            else
-                vent.trigger "#{thingEventName}:appshown" # set url
-
-
-
+class TagsModule
+    constructor: ->
+        this.tagCollection = new TagCollection()
+        this.tagsView = new TagsView
+            collection: this.tagCollection
 
     # called by thingApp
     # display the tags view
-    tagsModule.showTagList = ->
-        view = new TagsView
-            collection: tagsModule.tagCollection
-        mainApp.layout.navigation.show view
+    showTagList: ->
+        tagApp = this
+        fetch = undefined
+        if this.tagCollection.length == 0
+            fetch = this.tagCollection.fetch()  # returns promise. render waits.
+        show = () -> mainApp.layout.navigation.show tagApp.tagsView # returns promise
+        $.when(fetch).then show
+        # use an async template, so the standard tags are rendered first
 
 
-    # load the dynamic tags and make the collection for the view
-    tagsModule.addInitializer ->
-        tagsModule.tagCollection = new TagCollection()
-        promise = tagsModule.tagCollection.fetch() # returns jqXHR promise
-        # initializer is implemented as a deferred, but doesn't wait on deferreds.
-        # so showTagList is called before the tagCollection is ready
+# view for the list of tags. standard tags hard coded plus dynamic tags
+class TagsView extends Backbone.Marionette.ItemView
+    template: "thing.tags"  #  "#{thingCssName}.tags"
+    serializeData: ->
+        _.extend commonData,
+            customTags: this.collection.toJSON()
+        # could return promise
 
-        #test
-        #promise.done ->
-        #    tagsModule.serializeData = serializeData()
+    events:
+        "click a": "tagClicked"
 
-    console.log "tagsModule", this
+    tagClicked: (e) ->
+        e.preventDefault()
+        tag = $(e.currentTarget).data("tag")
+        if tag
+            vent.trigger "#{thingEventName}:tag:show", tag
+            vent.trigger "#{thingEventName}:appshown", "tag", tag # set url
+        else
+            vent.trigger "#{thingEventName}:appshown" # set url
+        # this navigates by data, not url link (shown writes the link, not the direct click)
+        # even so it can fail if the clicked url is different (sequence changed?)
+
+
+module.exports = TagsModule
 
 
 ###

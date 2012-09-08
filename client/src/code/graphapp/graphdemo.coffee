@@ -1,9 +1,10 @@
 #mainApp = require "mainapp/mainapp.js"
 
-window.MainApp.module "graphApp.graphDemo", (graphDemo) ->
+#window.MainApp.module "graphApp.graphDemo", (graphDemo) ->
 
-    graphDemo.demo = () ->
-    # http://bl.ocks.org/1377729
+class GraphDemo
+    demo: ->
+        # http://bl.ocks.org/1377729
 
         nodes = []
         links = []
@@ -136,3 +137,6 @@ window.MainApp.module "graphApp.graphDemo", (graphDemo) ->
             anchorNode.call updateNode
             link.call updateLink
             anchorLink.call updateLink
+
+module.exports = GraphDemo
+

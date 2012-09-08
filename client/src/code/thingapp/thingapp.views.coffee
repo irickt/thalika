@@ -1,4 +1,3 @@
-#parent thingApp
 
 Backbone = require "backbone"
 
@@ -8,6 +7,7 @@ mainApp = require "mainapp/mainapp.js"
 
 # require template(s)
 
+
 thingCssName = "reward"
 thingModuleName = "reward"
 #thingPathName = "rewards"
@@ -15,8 +15,6 @@ thingEventName = "reward"
 #thingDataName = "reward"
 
 
-#serializeDataDetail = ->
-#serializeDataPreview = ->
 
 # full contents of the thing
 ItemDetailView = Backbone.Marionette.ItemView.extend
@@ -45,21 +43,18 @@ ListView = Backbone.Marionette.CollectionView.extend
     itemView: ItemInListView
 
 
-MainApp.module "#{thingModuleName}App.thingViews", (thingViews) ->
-
+class TagViews
     # public methods called by thingApp
     # display a specific item
-    thingViews.showItem = (item) ->
+    showItem: (item) ->
         view = new ItemDetailView
             model: item
         mainApp.layout.main.show view
 
     # display a list of items
-    thingViews.showList = (list) ->
+    showList: (list) ->
         view = new ListView
             collection: list
         mainApp.layout.main.show view
 
-
-    console.log "thingViews", this
-
+module.exports = TagViews

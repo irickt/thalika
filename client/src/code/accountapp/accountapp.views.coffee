@@ -1,6 +1,3 @@
-###
-parent accountApp
-###
 
 Backbone = require "backbone"
 $ = require "jquery"

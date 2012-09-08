@@ -20,6 +20,7 @@ glue
         backbone: "window.Backbone"
         d3: "window.d3"
         dust: "window.dust"
+        async: "window.async"
 
 #glue
 #    .set('debug', true)

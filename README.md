@@ -1,8 +1,12 @@
 
 
 
-
 ### To run the demo client with a sample server:
+
+Install these development utilities globally:  
+`npm install -g coffee-script`  
+`npm install -g dustjs-linkedin`  
+`npm install -g less`  
 
 Go to the client directory, install dependencies, and build  
 `cd <top>/client`  
@@ -15,7 +19,7 @@ Go into the server directory, install dependencies, and build
 `cake build`  
 
 Run the server  
-`node lib/server.js`  
+`node lib/js/server.js`  
 
 Browse to  
 http://localhost:4005  
@@ -29,7 +33,7 @@ In particular, only edit package.coffee, not package.json (but keep package.json
 Only edit less, not css.  
 
 Install the testing utility globally. It's huge.   
-npm install -g buster  
+`npm install -g buster`  
 
 Symlink Cakefile, client/Cakefile and server/Cakefile. They should stay the same.  
 Use forApplication, forBrowser and forServer flags for conditional build.  

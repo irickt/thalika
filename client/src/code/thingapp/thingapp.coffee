@@ -1,14 +1,11 @@
-###
-thingApp.Tags
-thingApp.thingViews
-
-# parent mainApp
-###
 
 Backbone = require "backbone"
 FilteredCollection = require "mainapp/mainapp.collection.js"
 
 {router, vent} = require "mainapp/mainapp.js"
+
+TagModule = require "thingapp/thingapp.tags.js"
+ThingViews = require "thingapp/thingapp.views.js"
 
 
 #thingCssName = "reward"
@@ -34,12 +31,42 @@ ThingCollection = FilteredCollection.extend
         return new ThingCollection filteredItems
 
 
-window.MainApp.module "#{thingModuleName}App", (thingApp) ->
+class ThingApp
+    constructor: () ->
+        router.bindRoutes thingEventName
 
-    router.bindRoutes thingEventName
+        vent.bind "#{thingEventName}:appshow", (args...) =>
+            vent.trigger "#{thingEventName}:appshown", args...
+            this.showThing args...
+
+        this.tagsWidget = new TagModule()
+        this.itemList = new ThingCollection()
+        this.thingViews = new ThingViews()
+
+        # any app url will trigger navigation set up
+        vent.bind "#{thingEventName}:appshown", =>
+            this.tagsWidget.showTagList()
+
+        # bind show events to display actions
+        # triggered by tag click or route or initialization
+
+        # show all the items
+        vent.bind "#{thingEventName}:show", =>
+            this.displayItemsFilteredBy()
+
+        # show items filtered by tag
+        vent.bind "#{thingEventName}:tag:show", (tag) =>
+            this.displayItemsFilteredBy tag
+
+        # show one item
+        vent.bind "#{thingEventName}:item:show", (itemId) =>
+            this.displayItem itemId
+
+    start: ->
+        this.itemList.fetch() # returns promise, resolved before show. onReset is enough?
 
     # router handler: show all items
-    showThing = (args...) ->
+    showThing: (args...) ->
         # parse and validate args
         if !args[0]
             vent.trigger "#{thingEventName}:show"
@@ -48,47 +75,21 @@ window.MainApp.module "#{thingModuleName}App", (thingApp) ->
         else
             vent.trigger "#{thingEventName}:item:show", args[0] # itemId
 
-    vent.bind "#{thingEventName}:appshow", (args...) ->
-        vent.trigger "#{thingEventName}:appshown", args...
-        showThing args...
-
-
-    # any app url will trigger navigation set up
-    vent.bind "#{thingEventName}:appshown", ->
-        thingApp.Tags.showTagList()
-
-
     # register a callback to fire when collection is reset, which is triggered by tag change
-    displayItemsFilteredBy = (tag) ->
-        thingApp.itemList.onReset (list) ->
+    displayItemsFilteredBy: (tag) ->
+        that = this
+        this.itemList.onReset (list) ->
             filteredItems = list.forTag tag
-            thingApp.thingViews.showList filteredItems # actually make a view and show it
+            that.thingViews.showList filteredItems # actually make a view and show it
 
     # register a callback to fire when collection is reset, which is triggered by ?
-    displayItem = (itemId) ->
-        thingApp.itemList.onReset (list) ->
+    displayItem: (itemId) ->
+        that = this
+        this.itemList.onReset (list) ->
             item = list.get itemId
-            thingApp.thingViews.showItem item
-
-
-    # bind show events to display actions
-    # triggered by tag click or route or initialization
-
-    # show all the items
-    vent.bind "#{thingEventName}:show", ->
-        displayItemsFilteredBy()
-
-    # show items filtered by tag
-    vent.bind "#{thingEventName}:tag:show", (tag) ->
-        displayItemsFilteredBy tag
-
-    # show one item
-    vent.bind "#{thingEventName}:item:show", (itemId) ->
-        displayItem itemId
+            that.thingViews.showItem item
 
 
 
-    thingApp.addInitializer ->
-        thingApp.itemList = new ThingCollection()
-        thingApp.itemList.fetch()
+module.exports = ThingApp
 

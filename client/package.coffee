@@ -18,6 +18,7 @@ module.exports =
         # dependencies included in script tags, but are accessed by `require`. see buildClient.coffee
         underscore: ">=1.3.3"
         backbone: "0.9.2"
+        async: "*"
         # jQuery: "*" # in npm it's wrapped for node. does it work for the browser too?
         # d3: "*" # in npm it's for node, depending on jsdom and sizzle.
         # "dustjs-linkedin": "" # the runtime only

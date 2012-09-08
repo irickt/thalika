@@ -8,8 +8,11 @@ $ = require "jquery"
 # require "asyncRenderer"
 Backbone.Marionette.Renderer.render = (templateName, data) ->
     asyncRender = $.Deferred()
-    window.dust.render templateName, data, (err, html) ->
-        asyncRender.resolve html
+    if !templateName
+        asyncRender.resolve null
+    else
+        window.dust.render templateName, data, (err, html) ->
+            asyncRender.resolve html
     asyncRender.promise()
 
 
@@ -88,4 +91,21 @@ mainApp.accountApp = new AccountApp()
 # reference not used, communication by events
 # app registers on load, then registered apps are made here (or on demand)
 console.log "accountApp", mainApp.accountApp
+
+GraphApp = require "graphapp/graphapp.js"
+console.log "GraphApp.prototype", GraphApp.prototype
+
+mainApp.graphApp = new GraphApp()
+# reference not used, communication by events
+# app registers on load, then registered apps are made here (or on demand)
+console.log "graphApp", mainApp.graphApp
+
+ThingApp = require "thingapp/thingapp.js"
+console.log "ThingApp.prototype", ThingApp.prototype
+
+mainApp.thingApp = new ThingApp()
+mainApp.thingApp.start()
+# reference not used, communication by events
+# app registers on load, then registered apps are made here (or on demand)
+console.log "thingApp", mainApp.thingApp
 
