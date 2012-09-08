@@ -2,8 +2,10 @@
 Backbone = require "backbone"
 $ = require "jquery"
 
+
 # dust = require "dust" # use window.dust for now.
 # sees exports and tries to require("./dust-helpers") ?? ...
+# also breaks if it's in a file with module.exports??
 
 # require "asyncRenderer"
 Backbone.Marionette.Renderer.render = (templateName, data) ->
@@ -105,7 +107,16 @@ console.log "ThingApp.prototype", ThingApp.prototype
 
 mainApp.thingApp = new ThingApp()
 mainApp.thingApp.start()
-# reference not used, communication by events
 # app registers on load, then registered apps are made here (or on demand)
 console.log "thingApp", mainApp.thingApp
 
+
+MainViews = require "mainapp/mainapp.layout.js"
+
+mainApp.mainViews = new MainViews()
+mainApp.layout = mainApp.mainViews.layout # FIX
+mainApp.mainViews.start()
+
+
+# using this messes up dust ??
+#module.exports = mainApp

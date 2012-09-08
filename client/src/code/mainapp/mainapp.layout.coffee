@@ -92,24 +92,40 @@ SelectorView = Backbone.Marionette.ItemView.extend
         for key in  _.pluck this.appList.appList, "name"
             vent.bind "#{key}:appshown", (setSel key)
 
+class MainViews
+    constructor: ->
+        this.layout = new Layout()
+        this.selector = new SelectorView()
 
+        this.layout.bind "show", ->
+            # when layout has been rendered (promise resolved)
+            vent.trigger "layout:rendered"
+            # starts Backbone.history.start() and handles the first route
+
+    start: ->
+        # empty layout in the content region
+        mainApp.content.show this.layout
+        mainApp.layout.selector.show this.selector
+
+
+module.exports = MainViews
+
+
+###
 window.MainApp.module "Layout", (layout) ->
 
     mainApp.addInitializer ->
-        mainApp.layout = new Layout()
-
         # when the layout has been rendered, start the application ie Backbone.history.start()
-        # this loads before Backbone? show should be after the promise resolves
         mainApp.layout.on "show", ->
             vent.trigger "layout:rendered"
 
-        # put the layout in the content region
+        # empty layout in the content region
+        mainApp.layout = new Layout()
         mainApp.content.show mainApp.layout
 
         selector = new SelectorView()
         mainApp.layout.selector.show selector
-
-        console.log "layout", mainApp.layout
+###
 
 
 

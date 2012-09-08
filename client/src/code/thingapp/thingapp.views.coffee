@@ -49,12 +49,12 @@ class TagViews
     showItem: (item) ->
         view = new ItemDetailView
             model: item
-        mainApp.layout.main.show view
+        mainApp.layout.main.show view # returns a promise
 
     # display a list of items
     showList: (list) ->
         view = new ListView
             collection: list
-        mainApp.layout.main.show view
+        mainApp.layout.main.show view # returns a promise
 
 module.exports = TagViews
