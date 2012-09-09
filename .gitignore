@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
+config.json
 *.js
 !client/lib/js/lib/*.js
 _work/*

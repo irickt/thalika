@@ -1,6 +1,5 @@
 require "mainapp/mainapp.js"
 
-
 $ () ->
     window.MainApp.start()
 

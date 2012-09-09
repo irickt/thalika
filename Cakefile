@@ -2,7 +2,7 @@
 Cakefile for top-level application and its clients and servers
 See template_notes.txt for general design and project layout
 
-select on config keys eg config.FOR_SERVER
+select on config markers eg config.FOR_SERVER
 uses subproject scripts to specialize the build
 
 
@@ -18,15 +18,22 @@ use async and exec/spawn so they can be mixed
 ###
 
 
+# examples of added options
+# option '-o', '--output [DIR]', 'directory for compiled code'
+# option '-t','--tap','Run tests with tap output'
+#option '-t', '--target [TARGET]', 'Deploy to target host platform'
+# options.verbose applied to tests
+
+
 
 config = require("./config.coffee")
 #console.log "config", config
 forApplication = config.FOR_APPLICATION
 forServer = config.FOR_SERVER
 forBrowser = config.FOR_BROWSER
-if forApplication then console.log "Build for APPLICATION"
-if forServer then console.log "Build for SERVER"
-if forBrowser then console.log "Build for BROWSER"
+if forApplication then console.log "APPLICATION"
+if forServer then console.log "SERVER"
+if forBrowser then console.log "BROWSER"
 
 
 _ = require 'underscore'
@@ -51,8 +58,11 @@ this is typically used twice for each task:
   once to compile the actually changed files
 
 FIX patch icing to add `settings` to the recipe. add settings to context for recipe and outputs.
-    settings.regexes then can be used in both.
+    then settings.regexes can be used in both.
     see runRecipeContext and ruleGraph.rule, respectively
+    currently, both are passed the options array containing command-line options
+FIX add a third regex for name if needed
+    tname = infile.replace regexes[0], regexes[2]
 ###
 targetedFiles = (task, sourceFiles, regexes, compiler) ->
     cmdTemplate =
@@ -61,9 +71,7 @@ targetedFiles = (task, sourceFiles, regexes, compiler) ->
         dustc: "dustc --name={{data.tname}} {{ data.infile }} {{ data.outfile }}"
     for infile in sourceFiles
         outfile = infile.replace regexes[0], regexes[1]
-        tname = if infile.indexOf('.dust.html') > 0 then path.basename(infile, ".dust.html") else ""
-        # FIX add a third regex for name if needed
-        # tname = infile.replace regexes[0], regexes[2]
+        tname = if infile.indexOf('.dust.html') > 0 then path.basename(infile, ".dust.html") else ""  # ugly special case
 
         if compiler
             tmpl = _.template cmdTemplate[compiler], null, {variable: 'data'} # 'data' is an efficiency tweak
@@ -77,11 +85,6 @@ targetedFiles = (task, sourceFiles, regexes, compiler) ->
         outfile # returns [ofile1, ...] # a coffeescript trick
 
 
-# examples of added options
-# option '-o', '--output [DIR]', 'directory for compiled code'
-# option '-t','--tap','Run tests with tap output'
-option '-t', '--target [TARGET]', 'Deploy to target host platform'
-# options.verbose applied to tests
 
 task 'version', 'Version number Use cake -v version for more info. ', (options) ->
     packageData = require "./package.coffee"
@@ -92,9 +95,6 @@ task 'version', 'Version number Use cake -v version for more info. ', (options) 
     else
         console.log packageData.version
 
-# task 'generate', 'Generate directories and config templates (nothing fancy)', ...
-    # don't replace anything that already exists
-    # generate config-sample.coffee from config.coffee
 
 task 'dev', 'Open shells. Mac and iTerm2 specific.', (options) ->
     target = path.join modulePath, "scripts/develop.coffee"
@@ -117,18 +117,8 @@ task 'compile:config', 'Convert package.coffee to package.json',
 
 
 
-task 'compile:scripts', 'Compile utility scripts in scripts/',
-    ['scripts/*.coffee', 'scripts/*/*.coffee', 'scripts/*/*/*.coffee'],
-        outputs: ->
-            regexes = [ /scripts\/(.*).coffee/,"scripts/js/$1.js" ]
-            targetedFiles this, this.filePrereqs, regexes
-        recipe: ->
-            regexes = [ /scripts\/(.*).coffee/,"scripts/js/$1.js" ]
-            targetedFiles this, this.modifiedPrereqs, regexes, "coffee"
-            this.finished()
-
 task 'compile:source', 'Compile from coffeescript in src to js in lib.',
-    ['src/code/*.coffee', 'src/code/*/*.coffee', 'src/code/*/*/*.coffee'],
+    ['src/code/**/*.coffee'],
         outputs: ->
             regexes = [ /src\/code\/(.*).coffee/,"lib/js/$1.js" ]
             targetedFiles this, this.filePrereqs, regexes
@@ -178,7 +168,6 @@ task 'compile:tests', 'Compile tests from cs to js',
 task 'build', 'Build client or server. This does all the above.',
     [
         'task(compile:config)'
-        'task(compile:scripts)'
         'task(compile:tests)'
         'task(compile:source)'
         'task(compile:templates)'

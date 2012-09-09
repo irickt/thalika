@@ -35,7 +35,10 @@ Only edit less, not css.
 Install the testing utility globally. It's huge.   
 `npm install -g buster`  
 
-Symlink Cakefile, client/Cakefile and server/Cakefile. They should stay the same.  
+Link Cakefile, client/Cakefile and server/Cakefile. They should stay the same.  
+`ln Cakefile client/Cakefile`  
+`ln Cakefile server/Cakefile`  
+
 Use forApplication, forBrowser and forServer flags for conditional build.  
 Put any additional build scripts in scripts/, server/scripts/ and client/scripts/  
 
