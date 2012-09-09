@@ -1,8 +1,8 @@
 .DS_Store
 node_modules
 config.json
-*.js
 !client/lib/js/lib/*.js
+*.js
 _work/*
 _old/*
 tmp/*

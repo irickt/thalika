@@ -117,61 +117,69 @@ task 'compile:config', 'Convert package.coffee to package.json',
 
 
 
-task 'compile:source', 'Compile from coffeescript in src to js in lib.',
-    ['src/code/**/*.coffee'],
+task 'compile:coffee', 'Compile from coffeescript in src to js in lib.',
+    ['**/src/code/**/*.coffee'],
         outputs: ->
-            regexes = [ /src\/code\/(.*).coffee/,"lib/js/$1.js" ]
+            console.log "outputs", this.filePrereqs
+            regexes = [ /(.*)src\/code\/(.*).coffee/,"$1lib/js/$2.js" ]
             targetedFiles this, this.filePrereqs, regexes
         recipe: ->
-            regexes = [ /src\/code\/(.*).coffee/,"lib/js/$1.js" ]
+            console.log "recipe", this.modifiedPrereqs
+            regexes = [ /(.*)src\/code\/(.*).coffee/,"$1lib/js/$2.js" ]
             targetedFiles this, this.modifiedPrereqs, regexes, "coffee"
             this.finished()
 
 task 'compile:templates', 'Compile templates from dust to js',
-    ['src/tmpl/*.dust.html'],
+    ['**/src/tmpl/*.dust.html'],
         outputs: ->
-            #console.log "outputs", this
-            regexes = [ /src\/tmpl(.*).dust.html/ , "lib/tmpl$1.dust.js" ]
+            regexes = [ /(.*)src\/tmpl\/(.*).dust.html/ , "$1lib/tmpl/$2.dust.js" ]
             targetedFiles this, this.filePrereqs, regexes
         recipe: ->
-            #console.log "recipe", this
-            regexes = [ /src\/tmpl(.*).dust.html/ , "lib/tmpl$1.dust.js" ]
+            regexes = [ /(.*)src\/tmpl\/(.*).dust.html/ , "$1lib/tmpl/$2.dust.js" ]
             targetedFiles this, this.modifiedPrereqs, regexes, "dustc"
             this.finished()
 
 task 'compile:style', 'Compile less to css',
-    ['src/style/*.less'],
+    ['**/src/style/*.less'],
         outputs: (options) ->
-            regexes = [ /src\/style(.*).less/, "lib/css$1.css" ]
+            regexes = [ /(.*)src\/style\/(.*).less/, "$1lib/css/$2.css" ]
             targetedFiles this, this.filePrereqs, regexes
         recipe: ->
-            regexes = [ /src\/style(.*).less/, "lib/css$1.css" ]
+            regexes = [ /(.*)src\/style\/(.*).less/, "$1lib/css/$2.css" ]
             targetedFiles this, this.modifiedPrereqs, regexes, "lessc"
             this.finished()
 
 task 'compile:tests', 'Compile tests from cs to js',
-    ['test/*.coffee'],
+    ['**/test/*.coffee'],
         outputs: (options) ->
-            regexes = [ /test(.*).coffee/,"test/js$1.js" ]
+            regexes = [ /(.*)test\/(.*).coffee/,"$1test/js/$2.js" ]
             targetedFiles this, this.filePrereqs, regexes
         recipe: ->
-            regexes = [ /test(.*).coffee/,"test/js$1.js" ]
+            regexes = [ /(.*)test\/(.*).coffee/,"$1test/js/$2.js" ]
             targetedFiles this, this.modifiedPrereqs, regexes, "coffee"
+            this.finished()
+
+task 'compile:source', 'Compile code, templates, styles, and tests',
+    [
+        'task(compile:coffee)'
+        'task(compile:templates)'
+        'task(compile:style)'
+        'task(compile:tests)'
+    ],
+        outputs: ->
+            []
+        recipe: ->
             this.finished()
 
 #task 'build:browser', 'Build client bundle.js and copy resources to image',
 
 #task 'build:server', 'Build server code and copy deploy image',
 
-###
-###
+
 task 'build', 'Build client or server. This does all the above.',
     [
         'task(compile:config)'
-        'task(compile:tests)'
         'task(compile:source)'
-        'task(compile:templates)'
-        'task(compile:style)'
     ],
         outputs: ->
             [] # public/ ...

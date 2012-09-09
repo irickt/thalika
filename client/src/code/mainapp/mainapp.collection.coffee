@@ -1,5 +1,4 @@
 
-
 Backbone = require "backbone"
 
 # collection is the base for filtered collections, constructed when a tag is selected
@@ -34,5 +33,6 @@ module.exports = FilteredCollection
             # the collection is ready
             filteredItems = list.forTag tag
             views.showList filteredItems # actually make a view and show it
+
 
 ###
