@@ -1,5 +1,5 @@
 {
-    "name": "sample-server",
+    "name": "thalika-server",
     "description": "serve sample data and static files",
     "version": "0.0.1",
     "author": "Rick Thomas",
@@ -29,7 +29,7 @@
         "shred": "*"
     },
     "devDependencies": {
-        "icing": "git://github.com/irickt/icing.git",
+        "icing": "git://github.com/irickt/icing.git#HEAD",
         "coffee-script": "*",
         "mkdirp": ""
     },

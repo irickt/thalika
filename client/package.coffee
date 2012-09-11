@@ -1,13 +1,13 @@
 # note: ship with package.json to allow initial install of dev dependencies
 
 module.exports =
-    name: "sample-client"
-    description: "serve sample data and static files"
+    name: "thalika-client"
+    description: "modular web client based on backbone marionette views"
     version: "0.0.1"
     author: "Rick Thomas"
     repository:
         type: "git"
-        url: "https://github.com/irickt/sample-server.git"
+        url: "https://github.com/irickt/thalika.git"
     licenses: [
         type: "MIT"
         url: "https://github.com/atlantanodejs/site-app/raw/master/LICENSE"
@@ -26,7 +26,7 @@ module.exports =
     devDependencies:
         #buster: "*" # use the global install
         gluejs: "*"
-        icing: "git://github.com/irickt/icing.git"
+        icing: "git://github.com/irickt/icing.git#HEAD" # 7f74f22
         'coffee-script': "*"
         "dustjs-linkedin": ""
         mkdirp: ""

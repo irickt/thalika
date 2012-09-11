@@ -1,5 +1,5 @@
 path = require 'path'
-packageData = require "./package"
+packageData = require "./package.coffee"
 
 config =
     base:
@@ -36,27 +36,26 @@ config =
             GITHUB_ADMIN_TOKEN: "x"
 
 
+
+# move this to cakefile
 _ = require "underscore"
 
-# move this to scripts if it varies by component
 makeConfig = (config) ->
     result = {}
 
     _.extend result, config.base, config.misc
 
-    _.extend result,
-        FOR_SERVER: config.base.FOR_SERVER? or false
-        FOR_BROWSER: config.base.FOR_BROWSER? or false
-
     env = process.env.NODE_ENV ?= (if process.platform is 'darwin' then 'development' else 'production')
     host = if env is "development" then config.host.development else config.host.production
-    creds = if env is "development" then config.creds.development else config.creds.production
-    _.extend result, host, creds
+    _.extend result, host
 
-    str = "http://<%=HOST%>:<%=PORT%>/"
+    #creds = if env is "development" then config.creds.development else config.creds.production
+    #_.extend result, creds
+
+    str = "http://{{ HOST }}:{{ PORT }}/"
     _.extend result, {BASEURL: _.template str, result }
 
-    str = "\n<%=TITLE%> \n listening on <%=BASEURL%> \n serving from <%=STATICDIR%> \n"
+    str = "\n{{ TITLE }} \n listening on {{ BASEURL }} \n serving from {{ STATICDIR }} \n"
     _.extend result, {MSG: _.template str, result}
 
     result

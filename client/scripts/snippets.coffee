@@ -1,10 +1,44 @@
+#!/usr/bin/env coffee
 
 
 _ = require "underscore"
 
-console.log _.map [], ->
+
+
+
+
+ # test case
+componentPaths = (components, paths) ->
+    cPaths = {}
+    _.forEach components, (component) ->
+        cPaths[component] = _.filter paths, (path) -> path.indexOf(component) == 0
+    cPaths[""] = _.filter paths, (path) -> _.all components, (component) -> path.indexOf(component) == -1
+    cPaths
+
+components = ["client/", "server/"]
+paths = [
+    "p.js"
+    "c.js"
+    "server/p.js"
+    "client/m.js"
+    "server/q.js"
+    ]
+
+console.log componentPaths components, paths
+
+
+
+
+
+
+
+
+
+
 
 ###
+console.log _.map [], ->
+
 
 a0 = []
 a2 = ["x", 2]

@@ -1,4 +1,4 @@
-test = window.buster
+test = window.buster # require "buster"
 
 test.testCase "A module",
     "states browser obvious": ->

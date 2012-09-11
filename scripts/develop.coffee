@@ -1,3 +1,5 @@
+#!/usr/bin/env coffee
+
 ascript =  """
     tell application "iTerm"
         -- activate

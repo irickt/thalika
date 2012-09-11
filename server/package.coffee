@@ -1,7 +1,7 @@
 # note: ship with package.json to allow initial install of dev dependencies
 
 module.exports =
-    name: "sample-server"
+    name: "thalika-server"
     description: "serve sample data and static files"
     version: "0.0.1"
     author: "Rick Thomas"
@@ -26,7 +26,7 @@ module.exports =
         shred: "*"
     devDependencies:
         #buster: "*" # use the global install
-        icing: "git://github.com/irickt/icing.git"
+        icing: "git://github.com/irickt/icing.git#HEAD"
         'coffee-script': "*"
         mkdirp: ""
 

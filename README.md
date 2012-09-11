@@ -51,13 +51,13 @@ Put any additional build scripts in scripts/, server/scripts/ and client/scripts
 ### Deploying (WIP)
 `cake --target heroku deploy` to deploy (WIP)
 
-heroku/ contains a git submodule that is a heroku instance. it exists to push the server image to heroku. there is no need to init it after cloning this repo because its contents are generated during build and deploy.  
+The deploy/ directory is a git submodule containing a server image. The deploy process generates its contents and then it is pushed to the server. This is a one way process, so there is no need to clone it after cloning this repo.
 http://longair.net/blog/2010/06/02/git-submodules-explained/  
 
-#### add the heroku instance to the repo as `heroku`  
-git submodule add git@heroku.com:frozen-gorge-3482.git heroku  
+#### add the server instance to the repo as `deploy`  
+git submodule add git@heroku.com:frozen-gorge-3482.git deploy  
 git add .  
-git ci -m'heroku submodule'  
+git commit -m'deploy submodule'  
 
 #### get the submodule after cloning the repo (not needed)  
 git submodule update --init  

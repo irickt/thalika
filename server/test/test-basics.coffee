@@ -4,7 +4,7 @@ test = require "buster"
 assert = test.assertions.assert
 refute = test.assertions.refute
 
-config = require( "../../config/js/config.js")
+config = require( "../../lib/js/config.json") # from test/js/ to lib/js/
 
 test.testCase "host configuration",
     setup:

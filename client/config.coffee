@@ -1,4 +1,4 @@
-packageData = require "../package"
+packageData = require "./package.coffee"
 
 config =
     base:
@@ -7,5 +7,7 @@ config =
         VERSION: packageData.version
         FOR_BROWSER: true
 
-module.exports = config.base # in general, extend the result with all leaf kv's pace namespace collisions
+module.exports = config.base
+
+# in general, extend the result with all leaf kv's pace namespace collisions
 
