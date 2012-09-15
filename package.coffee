@@ -23,7 +23,7 @@ module.exports =
         "fs-extra": ""
         ncp: ""
         mkdirp: ""
-        # these are dependencies as they are needed for its intended purpose
+        async: ""
 
     #devDependencies:
         #buster: "*" # use the global install

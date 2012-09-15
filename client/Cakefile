@@ -11,10 +11,6 @@ uses subproject scripts to specialize the build
 FIX
 fix for https://github.com/jashkenas/coffee-script/pull/2373
 
-icing this.exec does shell commands sequentially.
-also need an internal synchronous calls.
-use async and exec/spawn so they can be mixed
-
 ###
 
 
@@ -23,7 +19,9 @@ console.log ""
 
 
 _ = require 'underscore'
-_.templateSettings = { interpolate: /\{\{(.+?)\}\}/g }
+_.templateSettings =
+    interpolate: /\{\{(.+?)\}\}/g
+async = require "async"
 
 require 'icing'
 path = require 'path'
@@ -118,10 +116,11 @@ task 'version', 'Version number Use cake -v version for more info. ', (options) 
 
 
 task 'dev', 'Open shells. Mac and iTerm2 specific.', (options) ->
-    target = path.join modulePath, "scripts/develop.coffee"
+    # for whom, session per component, editor
+    target = path.join modulePath, "scripts/devenv.coffee"
     if fs.existsSync target
-        exec "coffee " + target
-
+        exec "coffee #{ target } #{ modulePath }"
+        # starts the dev server in a shell
 
 
 task 'compile:config', 'Convert package.coffee to package.json',
@@ -280,17 +279,48 @@ task 'test', 'Run tests',
 
 
 
+###
+switch for dev, deploy1, deploy2, ...
+config for server
+    host:port # env from script
+    static file path # env form script
+config for application
+    local deploy repo # script
+    deploy cmd/env # script
+    install hook scripts eg npm test
+###
 option '-t', '--target [TARGET]', 'Deploy to target host platform'
 # cake --target heroku deploy
 
 task 'deploy', 'Deploy to host',
     [], (options) ->
         if not forApplication
-            console.log "Deploy from Application"
+            console.error "Deploy from Application"
         else
-            deploy = require "./scripts/deploy.coffee"
-            deploy.deploy options.target
+            actions = require "./scripts/buildRepoForHeroku.coffee"
+            actions.buildDeployRepo
+                target: options.target
+                description: "deploy commit message"
+                deployRepoPath: "../deploy"
 
+###
+icing this.exec does shell commands sequentially, but not internal synchronous calls.
+use async so they can be mixed.
+
+
+async.series [
+        (callback) ->
+            exec "cmd", (err, stdout, stderr) ->
+                callback err, stdout
+    ,
+        (callback) ->
+            exec "cmd", (err, stdout, stderr) ->
+                callback err, stdout
+    ], (err, results) ->
+        console.log err, results
+
+
+###
 
 
 
@@ -313,13 +343,14 @@ https://github.com/jeremyruppel/frosting
 https://github.com/AvianFlu/ncp
 
 # use spawn to exec in a subdirectory
+# prefer to let scripts figure out where the are and adapt
 deploySh = spawn "sh", ["some cmd"],
     cwd: process.env.HOME + "/subproject"
     env: _.extend process.env,
         PATH: "full path to ./node_modules/.bin" + ":" + process.env.PATH
 
 
-
+# the hard way
 exec "coffee -o config/js/ -c config/package.coffee", (error) =>
     packageData = require "./config/js/package.js" # the complied file
     packageJsonPath = path.join modulePath, 'package.json'

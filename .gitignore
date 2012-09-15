@@ -6,6 +6,8 @@ config.json
 _work/*
 _old/*
 tmp/*
+.vim*
+*.swp
 *.pid
 *.gz
 *.log

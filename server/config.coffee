@@ -12,7 +12,7 @@ config =
         development:
             PORT: 4005
             HOST: "local.host"
-            STATICDIR: path.resolve process.cwd(), "../client/lib"
+            STATICDIR: path.resolve process.cwd(), "../client/lib" # relative to application
         production:
             PORT: 80
             HOST: "sevaa.atlantanodejs.org"

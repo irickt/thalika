@@ -99,10 +99,11 @@ app.use dispatch routes
 #app.use connect.favicon __dirname + '/public/favicon.ico'
 #app.use connect.static __dirname + "/public"
 app.use connect.static config.STATICDIR
+#app.use connect.directory config.STATICDIR
 
-app.listen config.PORT
+port = process.env.PORT or  config.PORT
 
-# console.log config # contains secrets
-console.log config.MSG ? ""
+app.listen port, ->
+    console.log config.MSG ? ""
 
 

@@ -25,6 +25,7 @@ Backbone.Marionette.Renderer.render = (templateName, data) ->
 
 
 
+
 MainApp = new Backbone.Marionette.Application()
 
 MainApp.addRegions
@@ -57,6 +58,7 @@ MainApp.vent.on "layout:rendered", ->
 
 # provides a simplified two-way "binding" to the browser's address bar
 # an app registers only its routeName eg     router.bindRoutes "account"
+# any elements after the routeName are passed to the app as arguments
 # app binds to routeName:appshow args to show itself
 # app triggers routeName:appshown args to display a url, and to trigger internal and external actions
 #        in effect incoming urls pass through app level controller
