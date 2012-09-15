@@ -148,7 +148,8 @@ task 'compile:config', 'Convert package.coffee to package.json',
             # console.log "compile:config", files
             for file in files
                 data = require "./#{file}"
-                target = file.replace("package.coffee", "package.json").replace "config.coffee", path.join configPath, "config.json"
+                target = file.replace("package.coffee", "package.json")
+                             .replace "config.coffee", path.join configPath, "config.json"
                 fs.writeFileSync (path.join modulePath, target), (JSON.stringify data, null, 4)
             this.finished()
 
@@ -289,38 +290,55 @@ config for application
     deploy cmd/env # script
     install hook scripts eg npm test
 ###
-option '-t', '--target [TARGET]', 'Deploy to target host platform'
-# cake --target heroku deploy
+option '-t', '--target [TARGET]', 'Deploy to target host eg cake --t heroku deploy'
 
 task 'deploy', 'Deploy to host',
-    [], (options) ->
+    [], (taskOptions) ->
         if not forApplication
             console.error "Deploy from Application"
-        else
-            actions = require "./scripts/buildRepoForHeroku.coffee"
-            actions.buildDeployRepo
-                target: options.target
-                description: "deploy commit message"
-                deployRepoPath: "../deploy"
+            # for applications with multiple services ...
+            return
 
-###
-icing this.exec does shell commands sequentially, but not internal synchronous calls.
-use async so they can be mixed.
+        actions = require "./scripts/buildRepoForHeroku.coffee"
+        deployInfo =
+            target: taskOptions.target
+            description: "deploy commit message"
+            deployRepoPath: path.resolve "../deploy"
+
+        deployCommands =
+            heroku: """
+                    git add #{ deployInfo.deployRepoPath }
+                    git push heroku master
+                    heroku config:set KEY1=VALUE1 [KEY2=VALUE2 ...] (if changed)
+                """
+        if taskOptions.target not in _.keys deployCommands
+           this.failed "Set a target eg  cake --target heroku deploy"
+        deployCommands = deployCommands[taskOptions.target].split "\n"
+
+        env =
+            cwd: modulePath
+
+        commands = []
+        commands.push (cb) ->
+                actions.buildDeployRepo, (err, items) ->
+                    cb err, items
+        commands.push ( (cb) ->
+                exec cmd, env, (err, stdout, stderr) ->
+                    cb err, stdout
+                ) for cmd in deployCommands
+    
+    # icing this.exec does shell commands sequentially, but not internal synchronous calls.
+    # use async so they can be mixed.
+    async.series commands, (err, results) ->
+            console.log err, results
 
 
-async.series [
-        (callback) ->
-            exec "cmd", (err, stdout, stderr) ->
-                callback err, stdout
-    ,
-        (callback) ->
-            exec "cmd", (err, stdout, stderr) ->
-                callback err, stdout
-    ], (err, results) ->
-        console.log err, results
+        
 
 
-###
+
+
+
 
 
 
@@ -342,8 +360,13 @@ https://github.com/jprichardson/node-fs-extra/
 https://github.com/jeremyruppel/frosting
 https://github.com/AvianFlu/ncp
 
-# use spawn to exec in a subdirectory
-# prefer to let scripts figure out where the are and adapt
+
+
+
+# scripts can figure out where the are and adapt
+# cmds need path and env set up
+
+# spawn streams stdout, exec buffers until done and does callback
 deploySh = spawn "sh", ["some cmd"],
     cwd: process.env.HOME + "/subproject"
     env: _.extend process.env,

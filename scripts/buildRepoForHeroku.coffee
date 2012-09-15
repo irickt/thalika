@@ -6,33 +6,55 @@ path = require "path"
 fs = require "fs"
 ncp = require('ncp').ncp
 mkdirpSync = require("mkdirp").sync
+async = require "async"
 
 modulePath = path.dirname path.dirname fs.realpathSync __filename # relative to this file
 
-copyItems = (items, sourcePath, targetPath) ->
-    console.log items
-    console.log "sourcePath", sourcePath
-    console.log "targetPath", targetPath
-    options =
-        filter: /.DS_Store/
-    _.each items, (sourceItem) ->
-        target = path.join targetPath, sourceItem
-        targetDir = path.dirname target
-        item = path.join sourcePath, sourceItem
-        console.log item, target
-        if !fs.existsSync targetDir
-            console.log "mkdir", targetDir
-            mkdirpSync targetDir
-        ncp item, target, (err) ->
-            console.log item, target
-            if err then console.log err
+makeDirIfNeededSync = (targetDir) ->
+    if !fs.existsSync targetDir
+        console.log "mkdir", targetDir
+        mkdirpSync targetDir
 
-buildDeployRepo = (deployInfo) ->
+makeFileSync = (targetPath, name, text) ->
+    targetPath = path.join targetPath, name
+    fs.writeFileSync targetPath, text
+
+dryRun = true
+copyOneItem = (item, cb) ->
+    source = path.join item[0], item[2]
+    target = path.join item[1], item[2]
+    console.log source
+    console.log "    -->  ", target
+    if dryRun
+        cb null, target
+        return
+    makeDirIfNeededSync item[1]
+    ncp source, target, (err) ->
+        cb err, target
+
+copyItems = (items, cb) ->
+    async.mapSeries items, copyOneItem, (err, results) ->
+        cb err, results
+
+buildDeployRepo = (deployInfo, callback) ->
     console.log "deployInfo", deployInfo
     deployRepoPath = path.resolve deployInfo.deployRepoPath
     console.log "deployRepoPath", deployRepoPath
 
-    # nice to glob here
+    # generate files
+    tmpPath = path.join modulePath, "tmp"
+    makeDirIfNeededSync tmpPath
+
+    makeFileSync tmpPath, "Procfile", """
+            web: node lib/js/server.js
+        """
+    makeFileSync tmpPath, "README.md", """
+            Generated files. Do not edit here.
+        """
+
+    # make an array of [sourceItem, targetDir]
+    copiesToDo = []
+
     items = """
         index.html
         bundle.js
@@ -42,33 +64,38 @@ buildDeployRepo = (deployInfo) ->
         lib/
     """
     items = items.split "\n"
-    sourcePath = path.join modulePath, "client/lib"
-    targetPath = path.join deployRepoPath, "client"
-    copyItems items, sourcePath, targetPath
+    copiesToDo.push ["client/lib", "client", item] for item in items
 
     items = """
-        package.json
-        node_modules/
-        lib/js/
+        server/package.json
+        server/node_modules/
+        server/lib/js/
     """
     items = items.split "\n"
-    sourcePath = path.join modulePath, "server"
-    targetPath = path.join deployRepoPath, "server"
-    copyItems items, sourcePath, targetPath
+    copiesToDo.push ["server", "server", item] for item in items
 
-
-
-    source = """
-        web: node lib/js/server.js
+    items = """
+        Procfile
+        README.md
     """
-    targetPath = path.join deployRepoPath, "Procfile"
-    fs.writeFileSync targetPath, source
+    items = items.split "\n"
+    dir = ""
+    copiesToDo.push ["tmp/", "", item] for item in items
 
-    source = """
-        Generated files. Do not edit here.
-    """
-    targetPath = path.join deployRepoPath, "README.md"
-    fs.writeFileSync targetPath, source
+
+    copiesWithPaths = []
+    copiesWithPaths.push [
+        (path.join modulePath, item[0])
+        (path.join deployRepoPath, item[1])
+        item[2]
+    ] for item in copiesToDo
+    
+
+    copyItems copiesWithPaths, (callback or ->)
+
+
+
+
 
 
 
