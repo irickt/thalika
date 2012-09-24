@@ -7,6 +7,7 @@ mainApp = require "mainapp/mainapp.js"
 # require template(s)
 
 GraphDemo = require "graphapp/graphdemo.js"
+console.log GraphDemo
 
 nextTick = (f) -> setTimeout f, 0
 
@@ -19,6 +20,7 @@ class GraphView extends Backbone.Marionette.ItemView
 
     initialize: ->
         this.graphDemo = new GraphDemo()
+        console.log this.graphDemo
         #
         # http://stackoverflow.com/questions/9651167/svg-not-rendering-properly-as-a-backbone-view
         # in backbone, make = (tagName, attributes, content) ->
@@ -32,7 +34,7 @@ class GraphView extends Backbone.Marionette.ItemView
         # in graphDemo, d3.select(".graph-view").append("svg:svg")
 
     onRender: =>
-        nextTick this.graphDemo.demo
+        nextTick nextTick this.graphDemo.demo
         # return a deferred to cause `render` event to wait on this
         #
         #this.graphDemo.demo()
@@ -46,6 +48,8 @@ class GraphView extends Backbone.Marionette.ItemView
         #    $el.html and onRender
         # the dom change from $el.html happens after onRender, replacing the svg
         # instead put this in beforeRender, then target the html at another el
+        #
+        # the additional nextTick allows the demo to be ready ???
 
 
 

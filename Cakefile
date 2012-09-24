@@ -170,7 +170,7 @@ task 'compile:code', 'coffee ... src/code/ -> lib/js/',
 task 'bundle:code', 'bundle compiled js using bundleCode.coffee',
     ['outputs(compile:code)'],
         outputs: ->
-            if forBrowser then ["lib/bundle.js"] else []
+            output = if forBrowser then ["lib/bundle.js"] else []
         recipe: ->
             console.log "bundle:code", "\n", this.modifiedPrereqs
             if forBrowser
@@ -237,32 +237,23 @@ task 'compile:tests', 'coffee ... test/ -> test/js/',
             targetedFiles this, this.modifiedPrereqs, regexes, "coffee"
             this.finished()
 
-task 'compile:source', 'Compile code, templates, styles, and tests',
+
+task 'build', 'Build client or server. This does all the above.',
     [
-        'outputs(compile:code)'
-        'outputs(compile:tmpl)'
-        'outputs(compile:style)'
-        'outputs(compile:tests)'
+        'task(bundle:code)'
+        'task(bundle:tmpl)'
+        'task(compile:style)'
+        'task(compile:tests)'
     ],
         outputs: ->
             []
         recipe: ->
             this.finished()
-
-
-task 'build', 'Build client or server. This does all the above.',
-    [
-        'outputs(compile:config)'
-        'outputs(compile:source)'
-        'outputs(bundle:code)'
-        'outputs(bundle:tmpl)'
-    ], (options) -> # equivalent to {recipe: (options) -> ..., outputs: []}
             #if forApplication
                 # child processes to build components
             #else if forBrowser
             #else if forServer
 
-            # this.finished()
 
 task 'test', 'Run tests',
     ['task(build)'], (options) -> # equivalent to {recipe: (options) -> ..., outputs: []}

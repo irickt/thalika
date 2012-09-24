@@ -1,34 +1,40 @@
 
+# error on reload, but ok after reload
+#   Cannot read property 'weight' of undefined
+# not the linkStrength function below
+# ?? an additional nextTick before calling demo fixed it
 
 class GraphDemo
-    demo: ->
+    demo: =>
+        gnodes = []
+        glinks = []
+
+        for i in [0..23]
+            node = label: "node " + i
+            gnodes.push node
+
+            for j in [0..(i-1)]
+                if Math.random() > .93
+                    glinks.push # link between two gnodes
+                        source: i # accepts index or node object
+                        target: j
+                        weight: (0.2 + (1 - 2 * 0.2) * Math.random())
+
+        this.draw gnodes, glinks
+
+    draw: (gnodes, glinks) ->
         # http://bl.ocks.org/1377729
 
-        nodes = []
-        links = []
         labelAnchors = []
         labelAnchorLinks = []
 
-        for i in [0..29]
-            node = label: "node " + i
-            nodes.push node
-            labelAnchors.push node: node
-            labelAnchors.push node: node
-
-        for i in [0..(nodes.length - 1)]
+        for i in [0..(gnodes.length - 1)]
+            labelAnchors.push node: gnodes[i]
+            labelAnchors.push node: gnodes[i]
             labelAnchorLinks.push # link between node and label
                 source: i * 2 # the node
                 target: i * 2 + 1 # the label
                 weight: 1
-
-            for j in [0..(i-1)]
-                if Math.random() > .93
-                    links.push # link between two nodes
-                        source: i
-                        target: j
-                        weight: (0.2 + (1 - 2 * 0.2) * Math.random())
-
-
 
 
         w = 960
@@ -38,8 +44,8 @@ class GraphDemo
 
         force = d3.layout.force()
             .size([w, h])
-            .nodes(nodes)
-            .links(links)
+            .nodes(gnodes)
+            .links(glinks)
             .gravity(1)
             .linkDistance(50)
             .charge(-3000)
@@ -58,7 +64,7 @@ class GraphDemo
         force2.start()
 
         link = vis.selectAll("line.link")
-            .data(links)
+            .data(glinks)
             .enter()
             .append("svg:line")
             .attr("class", "link")
