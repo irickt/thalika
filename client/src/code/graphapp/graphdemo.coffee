@@ -1,6 +1,4 @@
-#mainApp = require "mainapp/mainapp.js"
 
-#window.MainApp.module "graphApp.graphDemo", (graphDemo) ->
 
 class GraphDemo
     demo: ->

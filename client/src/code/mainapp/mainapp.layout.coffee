@@ -106,27 +106,10 @@ class MainViews
         # empty layout in the content region
         mainApp.content.show this.layout
         mainApp.layout.selector.show this.selector
+        # start the default app
 
 
 module.exports = MainViews
-
-
-###
-window.MainApp.module "Layout", (layout) ->
-
-    mainApp.addInitializer ->
-        # when the layout has been rendered, start the application ie Backbone.history.start()
-        mainApp.layout.on "show", ->
-            vent.trigger "layout:rendered"
-
-        # empty layout in the content region
-        mainApp.layout = new Layout()
-        mainApp.content.show mainApp.layout
-
-        selector = new SelectorView()
-        mainApp.layout.selector.show selector
-###
-
 
 
 

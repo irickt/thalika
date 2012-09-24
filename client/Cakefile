@@ -8,13 +8,13 @@ uses subproject scripts to specialize the build
 
 
 
-FIX
+fixed
 fix for https://github.com/jashkenas/coffee-script/pull/2373
+install coffee-script master or >1.3.3
 
 ###
 
 
-console.log "Please ignore the Coffeescript warning above" # annoying
 console.log ""
 
 
@@ -91,10 +91,10 @@ targetedFiles = (task, sourceFiles, regexes, compiler) ->
     for infile in sourceFiles
         outfile = infile.replace regexes[0], regexes[1]
         tname = if infile.indexOf('.dust.html') > 0 then path.basename(infile, ".dust.html") else ""
-
+        #console.log task.target, infile, outfile
         if compiler
             tmpl = _.template cmdTemplate[compiler], null, {variable: 'data'} # 'data' is an efficiency tweak
-            console.log task.target, compiler, infile, outfile
+            #console.log task.target, compiler, infile, outfile
             # add the output directory if missing
             if !fs.exists path.dirname outfile
                 mkdirp = require "mkdirp"
@@ -126,7 +126,7 @@ task 'dev', 'Open shells. Mac and iTerm2 specific.', (options) ->
 task 'compile:config', 'Convert package.coffee to package.json',
     [globPath + 'package.coffee', globPath + 'config.coffee'],
         outputs: ->
-            # console.log "outputs", this.filePrereqs
+            #console.log "outputs", this.filePrereqs
             regexes = [ /(.*)([package|config]).coffee/, "$1$2.json" ]
             targetedFiles this, this.filePrereqs, regexes
         recipe: ->
@@ -145,11 +145,12 @@ task 'compile:config', 'Convert package.coffee to package.json',
             for file in files
                 addFiles.push file.replace "package.coffee", "config.coffee"
             files = _.union files, addFiles
-            # console.log "compile:config", files
+            console.log "compile:config", files
             for file in files
                 data = require "./#{file}"
                 target = file.replace("package.coffee", "package.json")
                              .replace "config.coffee", path.join configPath, "config.json"
+                #console.log target, file, data
                 fs.writeFileSync (path.join modulePath, target), (JSON.stringify data, null, 4)
             this.finished()
 
@@ -320,21 +321,17 @@ task 'deploy', 'Deploy to host',
 
         commands = []
         commands.push (cb) ->
-                actions.buildDeployRepo, (err, items) ->
+                actions.buildDeployRepo (err, items) ->
                     cb err, items
         commands.push ( (cb) ->
                 exec cmd, env, (err, stdout, stderr) ->
                     cb err, stdout
                 ) for cmd in deployCommands
-    
-    # icing this.exec does shell commands sequentially, but not internal synchronous calls.
-    # use async so they can be mixed.
-    async.series commands, (err, results) ->
-            console.log err, results
 
-
-        
-
+        # icing this.exec does shell commands sequentially, but not internal synchronous calls.
+        # use async so they can be mixed.
+        async.series commands, (err, results) ->
+                console.log err, results
 
 
 

@@ -41,9 +41,7 @@ templateString = """
 
         end tell
     """
-templateString.replace /'/g, '"'   #" applescript requires double quotes
-scriptTemplate = _.template templateString
-
+scriptTemplate = _.template templateString.replace /'/g, '"'   #" applescript requires double quotes
 
 
 # tiny osascript module
